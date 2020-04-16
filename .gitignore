@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+/src/App.css
+/src/scss/bootstrap/bootstrap-grid.css
+/src/scss/bootstrap/bootstrap-reboot.css
+/src/scss/bootstrap/bootstrap.css
+/src/scss/font-awesome/font-awesome.css

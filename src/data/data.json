@@ -1,0 +1,287 @@
+[
+   {
+   "ruleName": "Rulesname1",
+    "RULES": {
+       "rule1": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Stock",
+          "ARR_VS_UNITS": "BARR",
+          "Stock_flag": "STOCK-SHOW-ARR",
+          "SUBS_OFFER": "*",
+          "product_name": "*",
+          "exclude": "member"
+       },
+       "rule2": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Stock",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "CCI Stock Large,CCI Stock Small,CCI Stock Other,CCT Stock Large,CCT Stock Small,CCT Stock Other",
+          "product_name": "*",
+          "exclude": "member"
+       },
+       "rule3": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Acrobat CC",
+          "exclude": "member"
+       },
+       "rule4": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Acrobat DC",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "ACRO,APAP",
+          "exclude": "member"
+       },
+       "rule5": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "All Apps",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "CCES,CCLE,CCSB,CCSN,CISK,CTSK,EEA",
+          "exclude": "member"
+       },
+       "rule6": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Illustrator",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "ILSK,ILST",
+          "exclude": "member"
+       },
+       "rule7": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "InDesign",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "IDSK,IDSN",
+          "exclude": "member"
+       },
+       "rule8": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "PDF Services",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "ACOM,CPDF,EPDF,SEND,SPDF",
+          "exclude": "member"
+       },
+       "rule9": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Photography",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "LPES,PHLT,PLES,PPSK",
+          "exclude": "member"
+       },
+       "rule10": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Photoshop",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "PHSK,PHSP",
+          "exclude": "member"
+       },
+       "rule11": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Premiere Pro",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "PPRO,PRSK",
+          "exclude": "member"
+       },
+       "rule12": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Sign",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "ECHG,ECHP",
+          "exclude": "member"
+       },
+       "rule13": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Stock",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "SASK,STEL,STKL,STKM,STKS,STOK,STOS,STSM,SUSK",
+          "exclude": "member"
+       },
+       "rule14": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "CSMB ETLA",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "ETLA",
+          "exclude": "member"
+       },
+       "rule15": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Rush",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "RUSH",
+          "exclude": "member"
+       },
+       "rule16": {
+          "Timestamp": "2020-01-23 06:01:56",
+          "Product_Category": "Spark",
+          "ARR_VS_UNITS": "*",
+          "Stock_flag": "*",
+          "SUBS_OFFER": "*",
+          "product_name": "SPRK",
+          "exclude": "member"
+       },
+       "rule17": {
+          "timestamp": "2020-02-13 03:02:46",
+          "Product_Category": "KARR",
+          "product_name": "KAR",
+          "SUBS_OFFER": "*",
+          "Stock_flag": "*",
+          "ARR_VS_UNITS": "*",
+          "exclude": "member"
+       },
+       "rule18": {
+          "timestamp": "2020-02-13 04:02:51",
+          "Product_Category": "FRESC",
+          "product_name": "FRAN",
+          "SUBS_OFFER": "FRE%",
+          "Stock_flag": "*",
+          "ARR_VS_UNITS": "!BARR",
+          "exclude": "pivot"
+       }
+    },
+    "IMPACT": "retention,member,pivot,sa41"
+ },
+ {
+   "ruleName": "Rulesname2",
+   "RULES": {
+      "rule1": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Stock",
+         "ARR_VS_UNITS": "BARR",
+         "Stock_flag": "STOCK-SHOW-ARR",
+         "SUBS_OFFER": "*",
+         "product_name": "*",
+         "exclude": "member"
+      },
+      "rule2": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Stock",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "CCI Stock Large,CCI Stock Small,CCI Stock Other,CCT Stock Large,CCT Stock Small,CCT Stock Other",
+         "product_name": "*",
+         "exclude": "member"
+      },
+      "rule3": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Acrobat CC",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ACRS,APCC,APRO",
+         "exclude": "member"
+      },
+      "rule4": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Acrobat DC",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ACRO,APAP",
+         "exclude": "member"
+      },
+      "rule5": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "All Apps",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "CCES,CCLE,CCSB,CCSN,CISK,CTSK,EEA",
+         "exclude": "member"
+      },
+      "rule6": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Illustrator",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ILSK,ILST",
+         "exclude": "member"
+      },
+      "rule7": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "InDesign",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "IDSK,IDSN",
+         "exclude": "member"
+      },
+      "rule8": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "PDF Services",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ACOM,CPDF,EPDF,SEND,SPDF",
+         "exclude": "member"
+      }
+   },
+   "IMPACT": "retention,member,pivot,sa41"
+},
+{
+   "ruleName": "Rulesname3",
+   "RULES": {
+      "rule1": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Stock",
+         "ARR_VS_UNITS": "BARR",
+         "Stock_flag": "STOCK-SHOW-ARR",
+         "SUBS_OFFER": "*",
+         "product_name": "*",
+         "exclude": "member"
+      },
+      "rule2": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Stock",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "CCI Stock Large,CCI Stock Small,CCI Stock Other,CCT Stock Large,CCT Stock Small,CCT Stock Other",
+         "product_name": "*",
+         "exclude": "member"
+      },
+      "rule3": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Acrobat CC",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ACRS,APCC,APRO",
+         "exclude": "member"
+      },
+      "rule4": {
+         "Timestamp": "2020-01-23 06:01:56",
+         "Product_Category": "Acrobat DC",
+         "ARR_VS_UNITS": "*",
+         "Stock_flag": "*",
+         "SUBS_OFFER": "*",
+         "product_name": "ACRO,APAP",
+         "exclude": "member"
+      }
+   },
+   "IMPACT": "retention,member,pivot,sa41"
+}
+
+]

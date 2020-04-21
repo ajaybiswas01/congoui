@@ -9411,3 +9411,55 @@ hr.style-two {
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); }
 
 /******************Reach MultiEmail Ends*********************/
+.leftSide {
+  width: 320px;
+  height: calc(100vh - 75px);
+  overflow: auto;
+  background: #f0f0ee; }
+  .leftSide .sideTabs {
+    background: #e0e0e0; }
+    .leftSide .sideTabs ul li {
+      width: 50%;
+      padding: 1rem;
+      font-size: 0.875rem;
+      list-style: 0.875rem;
+      text-align: center;
+      list-style: none;
+      cursor: pointer; }
+      .leftSide .sideTabs ul li:hover {
+        background: #bbbbbb; }
+      .leftSide .sideTabs ul li.active {
+        background: #bbbbbb; }
+  .leftSide .rulesList ul {
+    padding: 0;
+    margin: 0; }
+    .leftSide .rulesList ul li {
+      padding: 0.5rem 0.625rem;
+      background: #ccc;
+      position: relative;
+      margin-bottom: 1px; }
+      .leftSide .rulesList ul li:hover {
+        background: #a9a9a9; }
+      .leftSide .rulesList ul li .delIcon {
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        -webkit-transform: translate(0, -50%);
+        -moz-transform: translate(0, -50%);
+        -o-transform: translate(0, -50%);
+        -ms-transform: translate(0, -50%);
+        cursor: pointer; }
+
+.rightSide {
+  width: calc(100vw - 320px);
+  height: calc(100vh - 75px);
+  overflow: auto; }
+  .rightSide .form-label {
+    width: 20rem; }
+  .rightSide .input-box {
+    flex: 1; }
+  .rightSide .selBox {
+    flex: 1; }
+  .rightSide .addBtn {
+    margin: 0.25rem 0 0 0.625rem; }

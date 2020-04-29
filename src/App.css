@@ -9412,7 +9412,7 @@ hr.style-two {
 
 /******************Reach MultiEmail Ends*********************/
 .leftSide {
-  width: 320px;
+  width: 326px;
   height: calc(100vh - 75px);
   overflow: auto;
   background: #f0f0ee; }
@@ -9434,7 +9434,7 @@ hr.style-two {
     padding: 0;
     margin: 0; }
     .leftSide .rulesList ul li {
-      padding: 0.5rem 0.625rem;
+      padding: 0;
       background: #ccc;
       position: relative;
       margin-bottom: 1px; }
@@ -9450,16 +9450,34 @@ hr.style-two {
         -o-transform: translate(0, -50%);
         -ms-transform: translate(0, -50%);
         cursor: pointer; }
+      .leftSide .rulesList ul li .listVal {
+        padding: 0.5rem 0.625rem;
+        display: block;
+        cursor: pointer; }
 
 .rightSide {
-  width: calc(100vw - 320px);
+  width: calc(100vw - 326px);
   height: calc(100vh - 75px);
   overflow: auto; }
+  .rightSide .rowDiv:first-child .rowAct .minusBtn {
+    opacity: 0;
+    visibility: hidden; }
   .rightSide .form-label {
     width: 20rem; }
   .rightSide .input-box {
     flex: 1; }
   .rightSide .selBox {
     flex: 1; }
-  .rightSide .addBtn {
-    margin: 0.25rem 0 0 0.625rem; }
+  .rightSide .addBtn, .rightSide .minusBtn {
+    box-shadow: none; }
+  .rightSide .tableList {
+    max-height: 300px;
+    overflow: auto; }
+    .rightSide .tableList th {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border: 0;
+      border-bottom: 1px solid #d6d6d6; }
+    .rightSide .tableList th:first-child {
+      width: 10rem; }

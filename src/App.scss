@@ -999,7 +999,7 @@ hr.style-two {
 
 // Rules pages css
 .leftSide {
-  width: 320px;
+  width: 326px;
   height: calc(100vh - 75px);
   overflow: auto;
   background: #f0f0ee;
@@ -1032,7 +1032,7 @@ hr.style-two {
       margin: 0;
 
       li {
-        padding: 0.5rem 0.625rem;
+        padding:0;
         background: #ccc;
         position: relative;
         margin-bottom: 1px;
@@ -1050,15 +1050,28 @@ hr.style-two {
           -ms-transform: translate(0,-50%);
           cursor: pointer;
         }
+        .listVal{
+          padding: 0.5rem 0.625rem;
+          display: block;
+          cursor: pointer;
+        }
       }
     }
   }
 }
 
 .rightSide {
-  width: calc(100vw - 320px);
+  width: calc(100vw - 326px);
   height: calc(100vh - 75px);
   overflow: auto;
+  .rowDiv:first-child {
+    .rowAct {
+      .minusBtn{
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
   .form-label{
     width: 20rem;
   }
@@ -1068,7 +1081,21 @@ hr.style-two {
   .selBox{
     flex:1
   }
-  .addBtn{
-    margin:0.25rem 0 0 0.625rem;
+  .addBtn, .minusBtn {
+    box-shadow: none;
+  }
+  .tableList{
+    max-height: 300px;
+    overflow: auto;
+    th {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border: 0;
+      border-bottom: 1px solid #d6d6d6;
+    }
+    th:first-child{
+      width: 10rem;
+    }
   }
 }

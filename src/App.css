@@ -9471,7 +9471,7 @@ hr.style-two {
   .rightSide .addBtn, .rightSide .minusBtn {
     box-shadow: none; }
   .rightSide .tableList {
-    max-height: 300px;
+    max-height: 550px;
     overflow: auto; }
     .rightSide .tableList th {
       position: sticky;

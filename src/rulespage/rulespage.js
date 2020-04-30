@@ -52,14 +52,13 @@ export default class Rulespage extends Component {
             newarrval: [],
             newarrvalThead: [],
             vData: new Array(),
-            selJobList: [],
+            selJobList: new Array(),
             appendData: [],
             colData: [],
             valColObj: new Array(),
             objVal: new Array(),
             escuSelBox: new Array(),
-            escuSelBoxStore: null,
-            objDataSel: [],
+            escuSelBoxStore: null
 
         };
         for (let c = 0; c < this.state.leftSideData.length; c++) {
@@ -133,7 +132,6 @@ export default class Rulespage extends Component {
 
             }
         });
-        console.log('datashowVal', arrY)
         // for (let x = 0; x < this.state.datashowVal.length; x++) {
         //     const element = this.state.datashowVal[x];
         //     this.state.clickRowvalue.push(Object.values(element))
@@ -150,7 +148,6 @@ export default class Rulespage extends Component {
             dta: this.state.dta,
             listActive: true
         });
-        console.log('element', this.state.tableDataListNew);
     }
     inputChange = (e) => {
         this.setState({
@@ -173,9 +170,13 @@ export default class Rulespage extends Component {
         });
         // updated.push(this.state.colValue);
         this.setState({ tableDataListNew: this.state.tableDataListNew });
-        console.log('rulesList', this.state.tableDataListNew)
     }
     handleinputChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
+    inputOnChange=(e)=>{
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -202,29 +203,22 @@ export default class Rulespage extends Component {
     // }
 
     onOptionChange = (selectedOption) => {
-        const selJobList = []
+        const selJobList = new Array()
         if (selectedOption === null) {
-            console.log('No Sel value')
         } else {
-            console.log('Sel value have')
             for (let s = 0; s < selectedOption.length; s++) {
                 const element = selectedOption[s].value;
                 selJobList.push(element)
-                console.log('element', element)
             }
         }
-
-        // const result = Object.keys(this.state.selJobList).map((key) => this.state.selJobList[key])
-        // console.log('selectedOption', result)
-        // console.log('result', this.state.selJobList)
-        this.state.selJobList = selJobList
-        this.state.objDataSel = this.state.selJobList
+        this.state.selJobList = selectedOption
         this.setState({
-            selJobList: this.state.selJobList,
-            objDataSel: this.state.objDataSel
+            selJobList: this.state.selJobList
         })
     };
-
+    onOptionSubChange = (selectedval) => {
+        console.log('selectedval',selectedval)
+    }
     addClick() {
         this.setState(prevState => ({
             users: [...prevState.users, { colName: "", colValue: "" }]
@@ -270,11 +264,8 @@ export default class Rulespage extends Component {
         this.state.errorMsg = false
         //alert('A name was submitted: ' + JSON.stringify(this.state.users));
         event.preventDefault();
-        console.log('data', this.state.selJobList)
- 
-            console.log('no Blank', this.state.users)
+
             if (this.state.users[0].colName == '') {
-                console.log('no user value', Object.values(this.state.users))
             } else {
                 
                 for (let e = 0; e < this.state.users.length; e++) {
@@ -289,7 +280,7 @@ export default class Rulespage extends Component {
                       names.push(item.colName);
                     }
                   })
-                  console.log('names', names)
+
                   
                   let map = {};
                   let result = false;
@@ -303,17 +294,13 @@ export default class Rulespage extends Component {
                   if(result) {
                      alert('Column name already exist')
                      return false
-                  } else {
-                    console.log('val not mathch --->>>');
                   }
-
 
 
                 for (let index = 0; index < this.state.objVal.length; index++) {
                     const element = this.state.objVal[index].colName;
                     for (let u = 0; u < this.state.users.length; u++) {
                         if (this.state.users[u].colName == element) {
-                            console.log('val mathch');
                             alert('Column name already exist', JSON.stringify(this.state.users[u].colName))
                             return false
                         }
@@ -326,16 +313,20 @@ export default class Rulespage extends Component {
                 this.state.objVal = new Array()
                 this.state.fieldsListThead = []
                 this.state.valColObj = new Array()
+                const escuSelBox=new Array()
+                const selJobList=this.state.selJobList
+
+                
                 for (let x = 0; x < this.state.colData.length; x++) {
                     const element = this.state.colData[x];
                     this.state.vData.push(element)
-                    this.state.vData[x]['exclude'] = this.state.selJobList;
+                    this.state.vData[x]['exclude'] = selJobList;
                 }
 
-                for (let w = 0; w < this.state.selJobList.length; w++) {
-                    this.state.escuSelBox.push({ 'label': this.state.selJobList[w], 'value': w })
+                for (let w = 0; w < selJobList.length; w++) {
+                    escuSelBox.push({ 'label': selJobList[w], 'value': w })
                 }
-                this.state.escuSelBoxStore = this.state.escuSelBox;
+                this.state.escuSelBox = escuSelBox;
                 this.state.newarrval.push(this.state.vData)
                 this.state.newarrvalThead.push(this.state.vData)
                 this.state.fieldsList = this.state.newarrval;
@@ -384,13 +375,16 @@ export default class Rulespage extends Component {
 
         nextState.fieldsList = nextState.fieldsListNew
         const resultss = Object.keys(this.state.fieldsList).map((key) => this.state.fieldsList[key])
-        resultss.forEach((element, i) => {
-            for (let index = 0; index < element.length; index++) {
-                const el = element[index]
-                el.colValue=''
-            }
+        const newDataArr=new Array()
+        resultss.forEach((item, i) => {
+            item.forEach(element => {
+                newDataArr.push(element)
+                element.colValue=''
+                
+            });
         });
         
+        console.log('newDataArr', newDataArr)
         console.log('resultss', resultss)
         this.setState({
             fieldsList: nextState.fieldsList,
@@ -448,7 +442,6 @@ export default class Rulespage extends Component {
                             <div className="form-group d-flex align-items-center">
                                 <label className="form-label">Rule name<em>*</em></label>
                                 <div className="input-box">
-                                    {/* <input type="text" value="" className="form-control" /> */}
                                     <input type="text" name='ruleName' value={this.state.ruleName} onChange={e => this.handleinputChange(e)} className="form-control" />
                                 </div>
                             </div>
@@ -542,17 +535,17 @@ export default class Rulespage extends Component {
                                             <tr key={++j}>
                                                 <td key={j}>
                                                     {/* {r[0].exclude} */}
-                                                    <Select key={this.state.value} ref={this.wrapperSel}
+                                                    <Select key={this.state.value} value={this.state.value} ref={this.wrapperSel}
                                                         closeMenuOnSelect={true}
                                                         components={animatedComponents}
-                                                        options={this.state.escuSelBox} onChange={e => this.onOptionChange(e)}
+                                                        options={this.state.selJobList} onChange={e => this.onOptionSubChange(e)}
                                                     />
 
                                                 </td>
                                                 {
                                                     r.map((v, b) => {
                                                         return (v !== undefined &&
-                                                            <td key={b}><input value={v.colValue} onChange={e => this.handleinputChange(e)} className="form-control" /></td>
+                                                            <td key={b}><input name='colValue' value={v.colValue || ''} onChange={e => this.inputOnChange(e)} className="form-control" /></td>
 
                                                         )
 

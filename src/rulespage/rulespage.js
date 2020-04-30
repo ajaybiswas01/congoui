@@ -172,6 +172,8 @@ export default class Rulespage extends Component {
         this.setState({ tableDataListNew: this.state.tableDataListNew });
     }
     handleinputChange = (e) => {
+        console.log('e', e.target.value)
+        this.state.ruleName=e.target.value
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -266,6 +268,7 @@ export default class Rulespage extends Component {
         event.preventDefault();
 
             if (this.state.users[0].colName == '') {
+                alert('Column name empty')
             } else {
                 
                 for (let e = 0; e < this.state.users.length; e++) {
@@ -375,25 +378,34 @@ export default class Rulespage extends Component {
 
         nextState.fieldsList = nextState.fieldsListNew
         const resultss = Object.keys(this.state.fieldsList).map((key) => this.state.fieldsList[key])
-        const newDataArr=new Array()
-        resultss.forEach((item, i) => {
-            item.forEach(element => {
-                newDataArr.push(element)
-                element.colValue=''
-                
-            });
-        });
         
-        console.log('newDataArr', newDataArr)
         console.log('resultss', resultss)
         this.setState({
             fieldsList: nextState.fieldsList,
             fieldsListNew: nextState.fieldsListNew
         })
         
-        console.log('new row', Object.values(nextState.fieldsList[1]))
+        console.log('new row', Object.values(nextState.fieldsList))
     }
 
+    createRules=()=>{
+        console.log(data)
+        const subRule=[]
+        for (let b = 0; b < this.state.fieldsList.length; b++) {
+            const rule = this.state.fieldsList[b];
+            const rulePara='rule'+b
+            subRule.push({[rulePara] : rule})
+        }
+        const ruleData = Object.keys(subRule).map((key) => subRule[key])
+        console.log('subRule',ruleData)
+        const rulesObj=[]
+        rulesObj.push({
+            'ruleName':this.state.ruleName,
+            'RULES':Object.values(Object.values(subRule)),
+            'IMPACT':''
+        })
+        console.log('rulesObj', rulesObj)
+    }
 
 
     render() {
@@ -584,6 +596,7 @@ export default class Rulespage extends Component {
                                     </table>
 
                                 </div> */}
+                            <div onClick={this.createRules}>Rule Crate</div>
                         </div>
                     </div>
                 </div>

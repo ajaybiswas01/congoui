@@ -29,31 +29,27 @@ export default class RulesTable extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const datarows = nextProps.columnData.slice();
-        let newObj = {}, columnData = [];
-        if (!datarows.length) {
-            let rowData = [];
-            nextProps.columnModel.map(col => {
-                newObj = {
-                    columnName: col.columnName,
-                    columnType: col.columnType,
-                    columnValue: ''
-                };
-                rowData.push(newObj);
-            });
-            columnData.push(rowData);
-        } else {
-            
-        }
         this.setState({
             columnModel: nextProps.columnModel,
-            columnData: nextProps.columnData,
             selectedJobsList: nextProps.selectedJobsList
         });
     }
 
     addClickRow = evt => {
-
+        let { columnModel, columnData } = this.state;
+        let rowData = [], newObj = {};
+        columnModel.map(col => {
+            newObj = {
+                columnName: col.columnName,
+                columnType: col.columnType,
+                columnValue: ''
+            };
+            rowData.push(newObj);
+        });
+        columnData.push(rowData);
+        this.setState({
+            columnData: columnData
+        });
     }
 
     render() {
@@ -85,28 +81,30 @@ export default class RulesTable extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <Select closeMenuOnSelect={true}
-                                                components={animatedComponents}
-                                                options={this.state.selectedJobsList} onChange={e => this.onOptionChange(e)}
-                                                />
-                                        </td>
-                                        {this.state.columnData.length && this.state.columnData[0].map(rowData => {
-                                            return <td>
-                                            {rowData.columnType === 'operator' ? 
-                                                <select defaultValue={rowData.columnValue}>
-                                                    <option>select op</option>
-                                                    <option value="and">and</option>
-                                                    <option value="or">or</option>
-                                                </select> : 
-                                                <input type="text" defaultValue={rowData.columnValue} />}
+                                    {this.state.columnData.length && this.state.columnData.map(rowData => {
+                                        return <tr>
+                                            <td>
+                                                <Select closeMenuOnSelect={true}
+                                                    components={animatedComponents}
+                                                    options={this.state.selectedJobsList} onChange={e => this.onOptionChange(e)}
+                                                    />
                                             </td>
-                                        })}
-                                    </tr>
+                                            {rowData && rowData.length && rowData.map(rowData => {
+                                                return <td>
+                                                {rowData.columnType === 'operator' ? 
+                                                    <select defaultValue={rowData.columnValue}>
+                                                        <option>select op</option>
+                                                        <option value="and">and</option>
+                                                        <option value="or">or</option>
+                                                    </select> : 
+                                                    <input type="text" defaultValue={rowData.columnValue} />}
+                                                </td>
+                                            })}
+                                        </tr>
+                                    })}
                                 </tbody>
                             </table>
-                            {this.state.addRowShow ? <div className="addRowSec"><span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
+                            {this.state.columnData.length ? <div className="addRowSec"><span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
                         </div>
                     </div>
                 </div>

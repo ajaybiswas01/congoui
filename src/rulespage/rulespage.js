@@ -5,6 +5,7 @@ import { faTrashAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import data from '../data/data.json';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import RulesTable from './RulesTable';
 
 
 const animatedComponents = makeAnimated();
@@ -60,6 +61,12 @@ export default class Rulespage extends Component {
             escuSelBox: new Array(),
             escuSelBoxStore: null,
             objDataSel: null,
+
+
+            //new variables
+            columnModel: [],
+            columnData: [],
+            selectedJobsList: []
 
         };
         for (let c = 0; c < this.state.leftSideData.length; c++) {
@@ -203,9 +210,11 @@ export default class Rulespage extends Component {
 
     onOptionChange = (selectedOption) => {
         this.state.selJobList = []
+        let selectedJobsList = [];
         for (let s = 0; s < selectedOption.length; s++) {
             const element = selectedOption[s].value;
-            this.state.selJobList.push(element)
+            this.state.selJobList.push(element);
+            selectedJobsList.push({label: element, value: element});
             console.log('element', element)
         }
         const result = Object.keys(this.state.selJobList).map((key) => this.state.selJobList[key])
@@ -214,7 +223,8 @@ export default class Rulespage extends Component {
         this.state.objDataSel = this.state.selJobList
         this.setState({
             selJobList: this.state.selJobList,
-            objDataSel: this.state.objDataSel
+            objDataSel: this.state.objDataSel,
+            selectedJobsList
         })
     };
 
@@ -232,7 +242,12 @@ export default class Rulespage extends Component {
                         <input className="form-control" placeholder="Column Name" name="colName" value={el.colName || ''} onChange={this.handleChange.bind(this, i)} />
                     </div>
                     <div className="col-md-6">
-                        <input className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)} />
+                        {/*<input className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)} />*/}
+                        <select className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)}>
+                            <option value="">select</option>
+                            <option value="input">input</option>
+                            <option value="output">output</option>
+                        </select>
                     </div>
                 </div>
                 <div className="rowAct ml-3">
@@ -264,6 +279,8 @@ export default class Rulespage extends Component {
         //alert('A name was submitted: ' + JSON.stringify(this.state.users));
         event.preventDefault();
         console.log('data', this.state.selJobList)
+        let newarr = [];
+        newarr[0] = [];
         if (this.state.selJobList === null) {
             //return this.state.fieldsList
             this.state.errorMsg = true
@@ -340,11 +357,37 @@ export default class Rulespage extends Component {
                 this.state.fieldsList = this.state.fieldsListNew
                 this.state.fieldsList[v] = Object.values(this.state.objVal)
             }
+
+            let inputs = [{colName: 'col1', colType: 'type1'}];
+            let inputColumns = [], outputColumns = [], inputCols = [];
+            Object.values(this.state.objVal).map(obj => {
+                if(obj.colValue === 'input') {
+                    inputCols.push({columnName: obj.colName, columnType: obj.colValue});
+                }
+            });
+            inputCols.map((obj,i) => {
+                inputColumns.push(obj);
+                if(i+1 !== inputCols.length)
+                    inputColumns.push({
+                        columnName: "operator",
+                        columnType: "operator",
+                        operatorLHSColumn: obj.colName,
+                        operatorRHSColumn: inputCols[i+1].colName
+                    });
+            });
+            Object.values(this.state.objVal).map((obj,i) => {
+                if(obj.colValue === 'output') {
+                    outputColumns.push({columnName: obj.colName, columnType: obj.colValue});
+                }
+            });
+            newarr[0] = inputColumns.concat(outputColumns);
         }
         this.setState({
             colData: this.state.colData,
             fieldsList: this.state.fieldsList,
             fieldsListThead: this.state.fieldsListThead,
+            columnModel: newarr[0],
+            columnData: [],
             escuSelBox: this.state.escuSelBox
         })
     }
@@ -493,6 +536,9 @@ export default class Rulespage extends Component {
                                     </div>
                                 </form> */}
                             </div>
+
+                            {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} /> : ''}
+                            
 
                             <div className="tableList">
                                 <table className="table">

@@ -9440,6 +9440,8 @@ hr.style-two {
       margin-bottom: 1px; }
       .leftSide .rulesList ul li:hover {
         background: #a9a9a9; }
+      .leftSide .rulesList ul li.active {
+        background: #a9a9a9; }
       .leftSide .rulesList ul li .delIcon {
         position: absolute;
         right: 0.5rem;

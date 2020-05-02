@@ -20,10 +20,10 @@ export default class Rulespage extends Component {
         this.state = {
             selectedOption: null,
             ruleName: '',
+            fullRulesData: [],
             leftSideData: Object.values(data),
             rulesList: [],
             rulesdata: [],
-            keyNames: [],
             tabaleTdData: [],
             tabaleTdDataNew: new Array(),
             dataVal: [],
@@ -34,10 +34,8 @@ export default class Rulespage extends Component {
             datashowVal: [],
             tableDataList: [],
             tableDataListNew: new Array(),
-            clickRowvalue: new Array(),
             rows: [],
             dta: [],
-            newfullData: Object.values(data[0].RULES),
             getDataList: [],
             users: [{ colName: "", colValue: "" }],
             joblist: [
@@ -58,17 +56,32 @@ export default class Rulespage extends Component {
             valColObj: new Array(),
             objVal: new Array(),
             escuSelBox: new Array(),
-            escuSelBoxStore: null
-
+            escuSelBoxStore: null,
+            ruleNameArr: [],
+            activeLink: null,
+            dataNewVal: [],
+            selectedValue:''
         };
+
         for (let c = 0; c < this.state.leftSideData.length; c++) {
             this.state.rulesList.push(Object.values(this.state.leftSideData[c].RULES))
             this.state.tableDataList.push(Object.values(this.state.rulesList[c]))
 
             for (let b = 0; b < this.state.tableDataList[c].length; b++) {
                 this.state.theadData.push(Object.keys(this.state.tableDataList[c][b]))
+                this.state.tableDataListNew.push(Object.values(this.state.tableDataList[c][b]))
             }
+            
+            const dataNewVal = this.state.leftSideData[c]
+            dataNewVal['id'] = c
+            dataNewVal['className'] = 'listLi'
+            this.state.dataNewVal.push(dataNewVal)
+
         }
+        Array.prototype.move = function(from, to) {
+            this.splice(to, 0, this.splice(from, 1)[0]);
+        };
+        
     }
     state = {
         workActive: false,
@@ -76,16 +89,23 @@ export default class Rulespage extends Component {
         listActive: false,
         addColShow: false,
         addRowShow: false,
-        errorMsg: true
+        errorMsg: true,
+        createRuleShow:false,
+        tableShowData:false
     }
 
 
 
     deleteRow = (index) => {
-        console.log(index)
-        const newRows = this.state.leftSideData.slice(0, index).concat(this.state.leftSideData.slice(index + 1));
+        var newRows=[]
+        if (window.confirm("Delete the item?")) {
+            newRows = this.state.dataNewVal.slice(0, index).concat(this.state.dataNewVal.slice(index + 1));
+        }else{
+            return false
+        }
+        
         this.setState({
-            leftSideData: newRows,
+            dataNewVal: newRows,
         });
     };
     workFlowClick = () => {
@@ -101,16 +121,17 @@ export default class Rulespage extends Component {
         })
     }
     listClick = (index) => {
-        this.state.listActive = false
-        this.state.clickRowvalue = [];
+        this.state.ruleName = this.state.leftSideData[index].ruleName
+        this.state.listActive = false;
+        this.state.tableShowData= true;
+        this.state.createRuleShow=true
+
         this.state.tableDataListNew = [];
-        this.state.keyNames = [];
-        this.state.dataVal = [];
 
         this.state.datashowVal = this.state.rulesList[index];
         this.state.rulesdata = Object.values(this.state.leftSideData[index])
         this.state.dta = this.state.rulesdata[2].split(',');
-        console.log('Full jason', this.state.datashowVal)
+
         // grid data
         var arrX = [], arrY = [], arrZ = [], i = 0, j = 0, newArr = [];
         this.state.datashowVal.forEach((item, ind) => {
@@ -132,23 +153,33 @@ export default class Rulespage extends Component {
 
             }
         });
-        // for (let x = 0; x < this.state.datashowVal.length; x++) {
-        //     const element = this.state.datashowVal[x];
-        //     this.state.clickRowvalue.push(Object.values(element))
-        //     this.state.keyNames.push(Object.keys(element))
-        // }
+        const dataVal = []
         for (let c = 0; c < this.state.dta.length; c++) {
             const element = this.state.dta[c];
-            this.state.dataVal.push({ 'label': element, value: c })
+            dataVal.push({ 'label': element, value: c })
         }
-        this.state.tableDataListNew = arrZ
 
+        for (let t = 0; t < this.state.theadData.length; t++) {
+            this.state.theadData[t].move(this.state.theadData[t].length - 1,1)
+        }
+        for (let f = 0; f < this.state.tableDataListNew.length; f++) {
+            this.state.tableDataListNew[f].move(this.state.tableDataListNew[f].length - 1,1)
+        }
+        
+        console.log('dataVal', Object.values(dataVal[0]))
+        this.state.tableDataListNew=arrZ
+        console.log('tableDataListNew',this.state.tableDataListNew)
+        this.state.dataVal = dataVal;
         this.setState({
-            tableDataListNew: this.state.tableDataListNew,
+            tableDataListNew: arrZ,
             dta: this.state.dta,
-            listActive: true
+            dataVal: this.state.dataVal,
+            listActive: true,
+            activeLink: index,
+            selectedValue:Object.values(dataVal)
         });
     }
+  
     inputChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -168,42 +199,25 @@ export default class Rulespage extends Component {
         this.state.tableDataListNew.forEach((element, index) => {
             element = (pushDataFull[index] != undefined ? pushDataFull[index] : '')
         });
-        // updated.push(this.state.colValue);
         this.setState({ tableDataListNew: this.state.tableDataListNew });
     }
     handleinputChange = (e) => {
-        console.log('e', e.target.value)
-        this.state.ruleName=e.target.value
+        const ruleNameArr = []
+        this.state.ruleName = e.target.value
+
+        ruleNameArr.push({ 'label': this.state.ruleName })
+        this.setState({
+            [e.target.name]: e.target.value,
+            ruleNameArr: this.state.ruleNameArr
+        });
+    }
+    inputOnChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
-    inputOnChange=(e)=>{
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-    // onSubmit = (e) => {
 
-    //     e.preventDefault();
-    //     this.state.tabaleTdData = [];
-    //     this.state.keyNames.push(this.state.columnName);
-    //     const pushData = new Array();
-    //     for (let x = 0; x < this.state.datashowVal.length; x++) {
-    //         pushData.push(this.state.datashowVal[x][this.state.columnName]);
-    //     }
-
-    //     this.state.datashowVal.forEach((element, index) => {
-    //         element[this.state.columnName] = (pushData[index] != undefined ? pushData[index] : this.state.columnValue)
-    //     });
-    //     this.setState({
-    //         columnName: '',
-    //         columnValue: '',
-    //         datashowVal: this.state.datashowVal
-    //     })
-    //     console.log('data', this.state.datashowVal)
-    // }
-
+    // Job links Dropdwon
     onOptionChange = (selectedOption) => {
         const selJobList = new Array()
         if (selectedOption === null) {
@@ -218,8 +232,10 @@ export default class Rulespage extends Component {
             selJobList: this.state.selJobList
         })
     };
+
+    // Esclude Dropdwon
     onOptionSubChange = (selectedval) => {
-        console.log('selectedval',selectedval)
+        console.log('selectedval', selectedval)
     }
     addClick() {
         this.setState(prevState => ({
@@ -227,6 +243,7 @@ export default class Rulespage extends Component {
         }))
     }
 
+    // Col fields html
     createUI() {
         return this.state.users.map((el, i) => (
             <div key={i} className="rowDiv d-flex justify-content-between mb-3" onClick={this.inputClick(this, i)}>
@@ -261,170 +278,223 @@ export default class Rulespage extends Component {
     inputClick(i, e) {
         this.state.addColShow = true
     }
+
+    // Add col Submit
     handleSubmit(event) {
 
         this.state.errorMsg = false
         //alert('A name was submitted: ' + JSON.stringify(this.state.users));
+        
         event.preventDefault();
 
-            if (this.state.users[0].colName == '') {
-                alert('Column name empty')
-            } else {
-                
-                for (let e = 0; e < this.state.users.length; e++) {
-                    if (this.state.users[e].colName==null) {
-                        alert('Column name empty')
+        if (this.state.users[0].colName == '') {
+            alert('Column name empty')
+        } else {
+
+            for (let e = 0; e < this.state.users.length; e++) {
+                if (this.state.users[e].colName == null) {
+                    alert('Column name empty')
+                    return false
+                }
+            }
+            var names = [];
+            this.state.users.forEach((item) => {
+                if (!names.some(val => val === item)) {
+                    names.push(item.colName);
+                }
+            })
+            let map = {};
+            let result = false;
+            for (let i = 0; i < names.length; i++) {
+                if (map[names[i]]) {
+                    result = true;
+                    break;
+                }
+                map[names[i]] = true;
+            }
+            if (result) {
+                alert('Column name already exist')
+                return false
+            }
+
+
+            for (let index = 0; index < this.state.objVal.length; index++) {
+                const element = this.state.objVal[index].colName;
+                for (let u = 0; u < this.state.users.length; u++) {
+                    if (this.state.users[u].colName == element) {
+                        alert('Column name already exist', JSON.stringify(this.state.users[u].colName))
                         return false
                     }
                 }
-                var names = [];
-                this.state.users.forEach((item) => {
-                    if (!names.some(val => val === item)) {
-                      names.push(item.colName);
-                    }
-                  })
-
-                  
-                  let map = {};
-                  let result = false;
-                  for(let i = 0; i < names.length; i++) {
-                     if(map[names[i]]) {
-                        result = true;
-                        break;
-                     }
-                     map[names[i]] = true;
-                  }
-                  if(result) {
-                     alert('Column name already exist')
-                     return false
-                  }
-
-
-                for (let index = 0; index < this.state.objVal.length; index++) {
-                    const element = this.state.objVal[index].colName;
-                    for (let u = 0; u < this.state.users.length; u++) {
-                        if (this.state.users[u].colName == element) {
-                            alert('Column name already exist', JSON.stringify(this.state.users[u].colName))
-                            return false
-                        }
-                    }
-                }
-
-                this.state.addRowShow = true;
-                this.state.colData = this.state.users
-                this.state.vData = new Array()
-                this.state.objVal = new Array()
-                this.state.fieldsListThead = []
-                this.state.valColObj = new Array()
-                const escuSelBox=new Array()
-                const selJobList=this.state.selJobList
-
-                
-                for (let x = 0; x < this.state.colData.length; x++) {
-                    const element = this.state.colData[x];
-                    this.state.vData.push(element)
-                    this.state.vData[x]['exclude'] = selJobList;
-                }
-
-                for (let w = 0; w < selJobList.length; w++) {
-                    escuSelBox.push({ 'label': selJobList[w], 'value': w })
-                }
-                this.state.escuSelBox = escuSelBox;
-                this.state.newarrval.push(this.state.vData)
-                this.state.newarrvalThead.push(this.state.vData)
-                this.state.fieldsList = this.state.newarrval;
-                for (let y = 0; y < this.state.colData.length; y++) {
-                    this.state.colData[y] = []
-                    this.state.colData.splice(event, this.state.colData.length);
-                    this.state.colData[y] = Object.values(this.state.users)
-                }
-                for (let b = 0; b < this.state.fieldsList.length; b++) {
-                    const valueResult = Object.values(this.state.fieldsList[b])
-                    for (let u = 0; u < valueResult.length; u++) {
-                        this.state.objVal.push(valueResult[u])
-                    }
-                }
-                console.log('u', this.state.objVal)
-                this.state.fieldsListThead[0] = Object.values(this.state.objVal)
-                for (let c = 0; c < this.state.fieldsListThead[0].length; c++) {
-                    for (let j = 0; j < this.state.users.length; j++) {
-                        if (this.state.fieldsListThead[0]['colName'] === this.state.users[j]['colName']) {
-                            console.log('colName true')
-                        } else {
-                            console.log('colName false')
-                        }
-                    }
-
-
-                }
-                for (let v = 0; v < this.state.fieldsList.length; v++) {
-                    this.state.fieldsList = this.state.fieldsListNew
-                    this.state.fieldsList[v] = Object.values(this.state.objVal)
+            }
+            var newArrData=[]
+            var newArrDataTd=[]
+            for (let v = 0; v < this.state.users.length; v++) {
+                const eleth = this.state.users[v].colName;
+                const eletd = this.state.users[v].colValue
+                newArrData.push(eleth)
+                newArrDataTd.push(eletd)
+            }
+            for (let index = 0; index < this.state.theadData.length; index++) {
+                const element = this.state.theadData[index];
+                for (let b = 0; b < newArrData.length; b++) {
+                    element.push(newArrData[b])
                 }
             }
+            for (let f = 0; f < this.state.tableDataListNew.length; f++) {
+                const element = this.state.tableDataListNew[f];
+                for (let j = 0; j < newArrDataTd.length; j++) {
+                    element.push(newArrDataTd[j])
+                }
+                //console.log('uxc', element);
+                this.state.tableDataListNew[f]=element
+            }
 
+            console.log('Th', this.state.tableDataListNew)
+
+            this.state.addRowShow = true;
+            this.state.colData = this.state.users
+            this.state.vData = new Array()
+            this.state.objVal = new Array()
+            this.state.fieldsListThead = []
+            this.state.valColObj = new Array()
+            const escuSelBox = new Array()
+            const selJobList = this.state.selJobList
+
+
+            for (let x = 0; x < this.state.colData.length; x++) {
+                const element = this.state.colData[x];
+                this.state.vData.push(element)
+                this.state.vData[x]['exclude'] = selJobList;
+            }
+
+            for (let w = 0; w < selJobList.length; w++) {
+                escuSelBox.push({ 'label': selJobList[w], 'value': w })
+            }
+            this.state.escuSelBox = escuSelBox;
+            this.state.newarrval.push(this.state.vData)
+            this.state.newarrvalThead.push(this.state.vData)
+            this.state.fieldsList = this.state.newarrval;
+            for (let y = 0; y < this.state.colData.length; y++) {
+                this.state.colData[y] = []
+                this.state.colData.splice(event, this.state.colData.length);
+                this.state.colData[y] = Object.values(this.state.users)
+            }
+            for (let b = 0; b < this.state.fieldsList.length; b++) {
+                const valueResult = Object.values(this.state.fieldsList[b])
+                for (let u = 0; u < valueResult.length; u++) {
+                    this.state.objVal.push(valueResult[u])
+                }
+            }
+            console.log('u', this.state.objVal)
+            this.state.fieldsListThead[0] = Object.values(this.state.objVal)
+            for (let v = 0; v < this.state.fieldsList.length; v++) {
+                this.state.fieldsList = this.state.fieldsListNew
+                this.state.fieldsList[v] = Object.values(this.state.objVal)
+            }
+        }
+        
         this.setState({
             colData: this.state.colData,
             fieldsList: this.state.fieldsList,
             fieldsListThead: this.state.fieldsListThead,
             escuSelBox: this.state.escuSelBox,
-            selJobList:this.state.selJobList
+            selJobList: this.state.selJobList,
+            tableDataListNew:this.state.tableDataListNew
         })
     }
+
+    // Add row
     addClickRow(e) {
         var nextState = this.state;
 
         nextState.fieldsListNew.push(this.state.objVal);
-
+        
         nextState.fieldsList = nextState.fieldsListNew
         const resultss = Object.keys(this.state.fieldsList).map((key) => this.state.fieldsList[key])
+
         
         console.log('resultss', resultss)
         this.setState({
             fieldsList: nextState.fieldsList,
             fieldsListNew: nextState.fieldsListNew
         })
-        
+
         console.log('new row', Object.values(nextState.fieldsList))
     }
 
-    createRules=()=>{
-        console.log(data)
-        const subRule=[]
+    // Create Rules
+    createRules = () => {
+        if (this.state.ruleName == '') {
+            alert('Rule name empty')
+            return false
+        }
+        this.state.addRowShow = false;
+        const subRule = []
+        const rulArr = []
         for (let b = 0; b < this.state.fieldsList.length; b++) {
             const rule = this.state.fieldsList[b];
-            const rulePara='rule'+b
-            subRule.push({[rulePara] : rule})
+            const rulePara = 'rule' + b
+            subRule[rulePara] = rule
         }
-        const ruleData = Object.keys(subRule).map((key) => subRule[key])
-        console.log('subRule',ruleData)
-        const rulesObj=[]
+        console.log('subRule', subRule)
+
+
+        const rulesObj = []
         rulesObj.push({
-            'ruleName':this.state.ruleName,
-            'RULES':Object.values(Object.values(subRule)),
-            'IMPACT':''
+            'ruleName': this.state.ruleName,
+            'RULES': subRule,
+            'IMPACT': ''
         })
         console.log('rulesObj', rulesObj)
+        this.state.fullRulesData = rulesObj
+        
+        // this.state.ruleName=''
+        this.setState({
+            fullRulesData: this.state.fullRulesData,
+            fieldsList: this.state.fieldsList,
+            fieldsListThead: this.state.fieldsListThead,
+            objVal: this.state.objVal
+        })
+
     }
 
-
+    // Cancel Rules
+    cancelRules=()=>{
+        this.state.tableDataListNew=[]
+        this.state.fieldsList = []
+        this.state.theadData[0] = []
+        this.state.objVal=[]
+        this.state.users= [{ colName: "", colValue: "" }]
+        this.state.fieldsListThead=[]
+        this.state.addRowShow=false
+        this.state.dataVal=[]
+        this.state.createRuleShow=false
+        this.setState({
+            fieldsList: this.state.fieldsList,
+            tableDataListNew: this.state.tableDataListNew,
+            theadData: this.state.theadData,
+            objVal:this.state.objVal,
+            users: this.state.users,
+            fieldsListThead:this.state.fieldsListThead,
+            ruleName:'',
+            dataVal:this.state.dataVal
+        })
+    }
     render() {
-        this.state.addColShow = true
+        this.state.addColShow = true;
+        const sidemenuList = this.state.fullRulesData
         for (let v = 0; v < this.state.rulesList.length; v++) {
             this.state.tabaleTdData.push(Object.values(this.state.rulesList[v]))
         }
-        // const thdata = this.state.theadData[0].map((item, index) => (
-        //     <th key={index}>
-        //         {item}
-        //     </th>
-        // ));
-
-        const rulesListData = this.state.leftSideData.map((item, index, values) => (
-            <li key={index}>
-                <span className={this.state.listActive ? 'active listVal' : 'listVal'} onClick={() => { this.listClick(index); }}>{item.ruleName}</span>
-                <span className="delIcon" onClick={() => { this.deleteRow(index); }}><FontAwesomeIcon icon={faTrashAlt} /></span>
-            </li>
-        ));
+        const thdata = this.state.theadData[0].map((item, index) => 
+            {return (item !== undefined || null || '' &&  <th key={index} hidden={index==0 ? true : ''}>
+                {item}
+            </th>)
+        }
+        );
+        
+        const { dataNewVal, activeLink } = this.state;
         return (
             <div className="App">
                 <div className="mainPanel d-flex">
@@ -442,7 +512,14 @@ export default class Rulespage extends Component {
                             {!this.state.rulesActive ? <div>
                                 <div className="rulesList">
                                     <ul>
-                                        {rulesListData}
+                                        {dataNewVal.map(item => {
+                                            return (
+                                                <li key={item.id} className={item.className + (item.id === activeLink ? " active" : "")}>
+                                                    <span className='listVal' onClick={() => this.listClick(item.id)}>{item.ruleName}</span>
+                                                    <span className="delIcon" onClick={() => { this.deleteRow(item.id); }}><FontAwesomeIcon icon={faTrashAlt} /></span>
+                                                </li>
+                                            );
+                                        })}
                                     </ul>
                                 </div>
                             </div> : null}
@@ -463,9 +540,9 @@ export default class Rulespage extends Component {
                                     <div className="input-box">
                                         <Select key={this.state.value} ref={this.wrapper}
                                             closeMenuOnSelect={false}
-                                            components={animatedComponents}
-                                            isMulti
-                                            options={this.state.joblist} onChange={e => this.onOptionChange(e)}
+                                            components={animatedComponents} value={this.state.value}
+                                            isMulti defaultValue={this.state.selectedValue}
+                                            options={this.state.dataVal} onChange={e => this.onOptionChange(e)}
                                         />
                                     </div>
                                     {/* {this.state.errorMsg ? <div className="alert alert-danger" role="alert" >Choose job name</div> : null} */}
@@ -571,32 +648,38 @@ export default class Rulespage extends Component {
                                     </tbody>
                                 </table>
                             </div>
-                            {this.state.addRowShow ? <div className="addRowSec"><span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
-                            {/* <div className="tableList">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>{thdata}</tr>
-                                        </thead>                                   
+                            {this.state.addRowShow ? <div className="addRowSec">
+                                <span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
+                            {this.state.tableShowData ? 
+                            <div className="tableList">
+                                <table className="table">
+                                    <thead>
+                                        <tr>{thdata}</tr>
+                                    </thead>
 
-                                        <tbody>
-                                            {
-                                                this.state.tableDataListNew.map((numList, i) => (
-                                                    <tr key={i}>
-                                                        {
-                                                            numList.map((num, j) => {
-                                                                return (num !== undefined && <td key={j}><input name='colValue' value={num} className="form-control" onChange={e => this.inputChange(e)} /></td>)
-                                                            }
-                                                            )
+                                    <tbody>
+                                        {
+                                            this.state.tableDataListNew.map((numList, i) => (
+                                                <tr key={i}>
+                                                    {
+                                                        numList.map((num, j) => {
+                                                            return (num !== undefined && <td hidden={j==0 ? true : false} key={j}><input name='colValue' value={num} className="form-control" onChange={e => this.inputChange(e)} /></td>)
                                                         }
-                                                    </tr>
-                                                ))
-                                            }
-                                        </tbody>
+                                                        )
+                                                    }
+                                                </tr>
+                                            ))
+                                        }
+                                    </tbody>
 
-                                    </table>
+                                </table>
 
-                                </div> */}
-                            <div onClick={this.createRules}>Rule Crate</div>
+                            </div>
+                            :null}
+                            {this.state.createRuleShow ? <div className="mt-4 text-center">
+                                <span className="btn btn-primary mr-1" onClick={this.cancelRules}>Cancel Rules</span>
+                                <span className="btn btn-primary ml-1" onClick={this.createRules}>Create Rules</span>
+                            </div> : null}
                         </div>
                     </div>
                 </div>

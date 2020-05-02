@@ -1039,6 +1039,9 @@ hr.style-two {
         &:hover{
           background: #a9a9a9;
         }
+        &.active{
+          background: #a9a9a9;
+        }
         .delIcon{
           position: absolute;
           right: 0.5rem;

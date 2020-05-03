@@ -18,6 +18,7 @@ export default class Rulespage extends Component {
         this.addNewRow = this.addNewRow.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addClickRow = this.addClickRow.bind(this);
+        this.addClick = this.addClick.bind(this);
         this.state = {
             selectedOption: null,
             ruleName: '',
@@ -243,14 +244,14 @@ export default class Rulespage extends Component {
             <div key={i} className="rowDiv d-flex justify-content-between mb-3" onClick={this.inputClick(this, i)}>
                 <div className="row flex-fill">
                     <div className="col-md-6">
-                        <input className="form-control" placeholder="Column Name" name="colName" value={el.colName || ''} onChange={this.handleChange.bind(this, i)} />
+                        <input required autoComplete="off" className="form-control" placeholder="Column Name" name="colName" value={el.colName || ''} onChange={this.handleChange.bind(this, i)} />
                     </div>
                     <div className="col-md-6">
                         {/*<input className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)} />*/}
-                        <select className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)}>
-                            <option value="">select</option>
-                            <option value="input">input</option>
-                            <option value="output">output</option>
+                        <select required className="form-control" placeholder="Column Value" name="colValue" value={el.colValue || ''} onChange={this.handleChange.bind(this, i)}>
+                            <option value="">Select Column Type</option>
+                            <option value="input">Input</option>
+                            <option value="output">Output</option>
                         </select>
                     </div>
                 </div>
@@ -383,7 +384,18 @@ export default class Rulespage extends Component {
             let inputColumns = [], outputColumns = [], inputCols = [];
             Object.values(this.state.objVal).map(obj => {
                 if(obj.colValue === 'input') {
-                    inputCols.push({columnName: obj.colName, columnType: obj.colValue});
+                    inputCols.push({
+                        columnName: obj.colName,
+                        columnType: obj.colValue,
+                        columnValue: ""
+                    });
+                }
+                if(obj.colValue === 'output') {
+                    outputColumns.push({
+                        columnName: obj.colName,
+                        columnType: obj.colValue,
+                        columnValue: ""
+                    });
                 }
             });
             inputCols.map((obj,i) => {
@@ -392,15 +404,17 @@ export default class Rulespage extends Component {
                     inputColumns.push({
                         columnName: "operator",
                         columnType: "operator",
-                        operatorLHSColumn: obj.colName,
-                        operatorRHSColumn: inputCols[i+1].colName
+                        columnValue: "",
+                        operatorLHSColumn: obj.columnName,
+                        operatorRHSColumn: inputCols[i+1].columnName
                     });
             });
-            Object.values(this.state.objVal).map((obj,i) => {
-                if(obj.colValue === 'output') {
-                    outputColumns.push({columnName: obj.colName, columnType: obj.colValue});
-                }
-            });
+            let excludeCol = [{
+                columnName: "exclude",
+                columnType: "exclude",
+                columnValue: ""
+            }];
+            inputColumns = excludeCol.concat(inputColumns);
             newarr[0] = inputColumns.concat(outputColumns);
         
         this.setState({
@@ -429,8 +443,8 @@ export default class Rulespage extends Component {
         console.log('new row', Object.values(nextState.fieldsList))
     }
 
-    createRules=()=>{
-        console.log(data)
+    createRules=(rulesData)=>{
+        /*console.log(data)
         const subRule=[]
         for (let b = 0; b < this.state.fieldsList.length; b++) {
             const rule = this.state.fieldsList[b];
@@ -445,7 +459,18 @@ export default class Rulespage extends Component {
             'RULES':Object.values(Object.values(subRule)),
             'IMPACT':''
         })
-        console.log('rulesObj', rulesObj)
+        console.log('rulesObj', rulesObj)*/
+
+
+
+        //send to API
+        const rulesObj=[];
+        rulesObj.push({
+            'ruleName': this.state.ruleName,
+            'RULES': rulesData,
+            'IMPACT': this.state.selectedJobsList
+        });
+
     }
 
 
@@ -514,15 +539,14 @@ export default class Rulespage extends Component {
 
 
                             </div>
-                            <div className="form-group">
-                                <div className="d-flex">
 
-                                </div>
+                            <hr />
+                            <div className="form-group">
                                 <form onSubmit={this.handleSubmit}>
                                     <div className="btmAct d-flex align-items-center mb-3">
                                         <label className="form-label w-auto mb-0">Column Definition<em>*</em></label>
                                         <div className="actDiv ml-4">
-                                            <span className="addBtn btn btn-outline-primary" onClick={this.addClick.bind(this)}><FontAwesomeIcon icon={faPlus} /></span>
+                                            <span className="addBtn btn btn-outline-primary" onClick={this.addClick}><FontAwesomeIcon icon={faPlus} /></span>
                                         </div>
                                     </div>
                                     <div className="colFields">
@@ -530,7 +554,7 @@ export default class Rulespage extends Component {
                                     </div>
                                     <div className="btmAct d-flex">
                                         {this.state.addColShow ? <div className="actDiv">
-                                            <input className="btn btn-primary mr-2" type="submit" value="Add as Column" />
+                                            <button className="btn btn-primary mr-2" type="submit">Add as Column</button>
                                         </div> : undefined || null}
                                     </div>
                                 </form>
@@ -566,10 +590,11 @@ export default class Rulespage extends Component {
                                 </form> */}
                             </div>
 
-                            {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} /> : ''}
+                            <hr />
+                            {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} saveRulesData={this.createRules} /> : ''}
                             
 
-                            <div className="tableList">
+                            <div className="tableList hide">
                                 <table className="table">
                                     <thead>
                                         {
@@ -615,7 +640,7 @@ export default class Rulespage extends Component {
                                     </tbody>
                                 </table>
                             </div>
-                            {this.state.addRowShow ? <div className="addRowSec"><span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
+                            {/*this.state.addRowShow ? <div className="addRowSec"><span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null*/}
                             {/* <div className="tableList">
                                     <table className="table">
                                         <thead>
@@ -640,7 +665,7 @@ export default class Rulespage extends Component {
                                     </table>
 
                                 </div> */}
-                            <div onClick={this.createRules}>Rule Crate</div>
+                            {/*<div onClick={this.createRules}>Rule Crate</div>*/}
                         </div>
                     </div>
                 </div>

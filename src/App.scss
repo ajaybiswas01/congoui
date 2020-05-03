@@ -1063,7 +1063,8 @@ hr.style-two {
 .rightSide {
   width: calc(100vw - 326px);
   height: calc(100vh - 75px);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   .rowDiv:first-child {
     .rowAct {
       .minusBtn{
@@ -1086,16 +1087,31 @@ hr.style-two {
   }
   .tableList{
     max-height: 550px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     th {
       position: sticky;
+      z-index: 1;
       top: 0;
-      background: #fff;
+      background: #ccc;
       border: 0;
       border-bottom: 1px solid #d6d6d6;
+      min-width: 180px;
+      max-width: 250px;
     }
-    th:first-child{
-      width: 10rem;
+    tr th:first-child, tr td:first-child, tr th:nth-child(2), tr td:nth-child(2) {
+      width: 70px;
+      max-width: 70px;
+      min-width: 70px;
+      
+    }
+    th[data-columntype=output]:first-of-type, th:not([data-columntype=output]) + th[data-columntype=output],
+    td[data-columntype=output]:first-of-type, td:not([data-columntype=output]) + td[data-columntype=output] {
+      border-left: 5px solid red;
+    }
+    td {
+      min-width: 180px;
+      max-width: 250px;
     }
   }
 }

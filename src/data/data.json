@@ -161,7 +161,7 @@
           "exclude": "pivot"
        }
     },
-    "IMPACT": "retention,member,pivot,sa41"
+    "IMPACT": "jobname1,jobname2"
  },
  {
    "ruleName": "Rulesname2",
@@ -239,7 +239,7 @@
          "exclude": "member"
       }
    },
-   "IMPACT": "retention,member2,pivot,sa42"
+   "IMPACT": "jobname2,jobname3"
 },
 {
    "ruleName": "Rulesname3",
@@ -281,7 +281,7 @@
          "exclude": "member"
       }
    },
-   "IMPACT": "retention1,member3,pivot,sa43"
+   "IMPACT": "jobname3,jobname4"
 }
 
 ]

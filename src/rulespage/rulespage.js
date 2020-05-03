@@ -20,26 +20,25 @@ export default class Rulespage extends Component {
         this.addClickRow = this.addClickRow.bind(this);
         this.addClick = this.addClick.bind(this);
         this.state = {
-            selectedOption: null,
+            rulesActive: true,
             ruleName: '',
-            fullRulesData: [],
+            fullRulesData: [], // Ajay - no need for this variable to be in state
             leftSideData: Object.values(data),
             rulesList: [],
             rulesdata: [],
-            tabaleTdData: [],
-            tabaleTdDataNew: new Array(),
+            tabaleTdData: [], // Ajay - no need for this variable to be in state
+            tabaleTdDataNew: new Array(), // Ajay - no need for this variable to be in state
             dataVal: [],
-            columnName: '',
-            columnValue: '',
-            colValue: '',
+            columnName: '', // Ajay - no need for this variable to be in state
+            columnValue: '', // Ajay - no need for this variable to be in state
+            colValue: '', // Ajay - no need for this variable to be in state
             theadData: new Array(),
-            datashowVal: [],
-            tableDataList: [],
+            datashowVal: [], // Ajay - no need for this variable to be in state
+            tableDataList: [], // Ajay - why using state variables as temporary variables ?
             tableDataListNew: new Array(),
             rows: [],
-            dta: [],
-            getDataList: [],
-            users: [{ colName: "", colValue: "" }],
+            dta: [], // Ajay - no need for this variable to be in state
+            users: [{ colName: "", colValue: "" }], // Ajay - why variable is named users ?
             joblist: [
                 { value: 'jobname1', label: 'Jobname1' },
                 { value: 'jobname2', label: 'Jobname2' },
@@ -49,17 +48,12 @@ export default class Rulespage extends Component {
             fieldsList: [],
             fieldsListNew: [],
             fieldsListThead: [],
-            newarrval: [],
-            newarrvalThead: [],
-            vData: new Array(),
+            newarrval: [], // Ajay - why using state variables as temporary variables ?
+            vData: new Array(), // Ajay - why using state variables as temporary variables ?
             selJobList: new Array(),
-            appendData: [],
             colData: [],
-            valColObj: new Array(),
             objVal: new Array(),
             escuSelBox: new Array(),
-            escuSelBoxStore: null,
-            ruleNameArr: [],
             activeLink: null,
             dataNewVal: [],
             selectedValue:'',
@@ -91,11 +85,9 @@ export default class Rulespage extends Component {
         };
         
     }
+
+    // Ajay - why initializing state variables here
     state = {
-        workActive: false,
-        rulesActive: false,
-        listActive: false,
-        addColShow: false,
         addRowShow: false,
         errorMsg: true,
         createRuleShow:false,
@@ -115,23 +107,14 @@ export default class Rulespage extends Component {
         });
     }
 
-    workFlowClick = () => {
+    ruleClick = (status) => {
         this.setState({
-            workActive: true,
-            rulesActive: true,
-        })
-    }
-
-    ruleClick = () => {
-        this.setState({
-            rulesActive: false,
-            workActive: false
+            rulesActive: status
         })
     }
 
     listClick = (index) => {
         this.state.ruleName = this.state.leftSideData[index].ruleName
-        this.state.listActive = false;
         this.state.tableShowData= true;
         this.state.createRuleShow=true
 
@@ -183,7 +166,6 @@ export default class Rulespage extends Component {
             tableDataListNew: arrZ,
             dta: this.state.dta,
             dataVal: this.state.dataVal,
-            listActive: true,
             activeLink: index,
             selectedValue:Object.values(dataVal)
         });
@@ -208,41 +190,12 @@ export default class Rulespage extends Component {
         this.setState({ tableDataListNew: this.state.tableDataListNew });
     }
 
-    handleinputChange = (e) => {
-        const ruleNameArr = []
-        this.state.ruleName = e.target.value
-
-        ruleNameArr.push({ 'label': this.state.ruleName })
+    // Job links Dropdown change event
+    onOptionChange = (selectedOptions) => {
         this.setState({
-            [e.target.name]: e.target.value,
-            ruleNameArr: this.state.ruleNameArr
+            selJobList: selectedOptions,
+            selectedJobsList: selectedOptions
         });
-    }
-
-    inputOnChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-
-    // Job links Dropdwon
-    onOptionChange = (selectedOption) => {
-		let selectedJobsList = [];
-        const selJobList = new Array()
-        if (selectedOption === null) {
-        } else {
-            for (let s = 0; s < selectedOption.length; s++) {
-                const element = selectedOption[s].value;
-                selJobList.push(element)
-				selectedJobsList.push({label: element, value: element});
-            }
-        }
-        this.state.selJobList = selectedOption
-        this.setState({
-            selJobList: this.state.selJobList,
-            objDataSel: this.state.objDataSel,
-            selectedJobsList
-        })
     };
 
     // Esclude Dropdwon
@@ -259,7 +212,7 @@ export default class Rulespage extends Component {
     // Col fields html
     createUI() {
         return this.state.users.map((el, i) => (
-            <div key={i} className="rowDiv d-flex justify-content-between mb-3" onClick={this.inputClick(this, i)}>
+            <div key={i} className="rowDiv d-flex justify-content-between mb-3">
                 <div className="row flex-fill">
                     <div className="col-md-6">
                         <input required autoComplete="off" className="form-control" placeholder="Column Name" name="colName" value={el.colName || ''} onChange={this.handleChange.bind(this, i)} />
@@ -292,10 +245,6 @@ export default class Rulespage extends Component {
         let users = [...this.state.users];
         users.splice(i, 1);
         this.setState({ users });
-    }
-
-    inputClick(i, e) {
-        this.state.addColShow = true
     }
 
     // Add col Submit
@@ -371,7 +320,6 @@ export default class Rulespage extends Component {
             this.state.vData = new Array()
             this.state.objVal = new Array()
             this.state.fieldsListThead = []
-            this.state.valColObj = new Array()
             const escuSelBox = new Array()
             const selJobList = this.state.selJobList
 
@@ -387,7 +335,6 @@ export default class Rulespage extends Component {
             }
             this.state.escuSelBox = escuSelBox;
             this.state.newarrval.push(this.state.vData)
-            this.state.newarrvalThead.push(this.state.vData)
             this.state.fieldsList = this.state.newarrval;
             for (let y = 0; y < this.state.colData.length; y++) {
                 this.state.colData[y] = []
@@ -529,7 +476,7 @@ export default class Rulespage extends Component {
 
     // Cancel Rules
     cancelRules=()=>{
-        this.state.tableDataListNew=[]
+        this.state.tableDataListNew=[] // Ajay - why doing this way?
         this.state.fieldsList = []
         this.state.theadData[0] = []
         this.state.objVal=[]
@@ -551,8 +498,6 @@ export default class Rulespage extends Component {
     }
 
     render() {
-        this.state.addColShow = true;
-        const sidemenuList = this.state.fullRulesData
         for (let v = 0; v < this.state.rulesList.length; v++) {
             this.state.tabaleTdData.push(Object.values(this.state.rulesList[v]))
         }
@@ -570,15 +515,12 @@ export default class Rulespage extends Component {
                     <div className="leftSide">
                         <div className="sideTabs">
                             <ul className="d-flex m-0 p-0">
-                                <li onClick={this.workFlowClick} className={this.state.workActive ? 'active' : ''}>Workflow manager</li>
-                                <li onClick={this.ruleClick} className={!this.state.rulesActive ? 'active' : ''}>Rule manager</li>
+                                <li onClick={e => this.ruleClick(false)} className={!this.state.rulesActive ? 'active' : ''}>Workflow manager</li>
+                                <li onClick={e => this.ruleClick(true)} className={this.state.rulesActive ? 'active' : ''}>Rule manager</li>
                             </ul>
                         </div>
                         <div className="tabContent">
-                            {this.state.workActive ? <div>
-                                <div className="">Works</div>
-                            </div> : null}
-                            {!this.state.rulesActive ? <div>
+                            {this.state.rulesActive ? <div>
                                 <div className="rulesList">
                                     <ul>
                                         {dataNewVal.map(item => {
@@ -591,16 +533,18 @@ export default class Rulespage extends Component {
                                         })}
                                     </ul>
                                 </div>
-                            </div> : null}
+                            </div> : <div>
+                                <div className="">Workflows</div>
+                            </div>}
                         </div>
                     </div>
-                    <div className="rightSide">
+                    {this.state.rulesActive ? <div className="rightSide">
                         <div className="rulesContainer p-3">
                             <h3 className="h3 text-center mb-4">Rules Manager</h3>
                             <div className="form-group d-flex align-items-center">
                                 <label className="form-label">Rule name<em>*</em></label>
                                 <div className="input-box">
-                                    <input type="text" name='ruleName' value={this.state.ruleName} onChange={e => this.handleinputChange(e)} className="form-control" />
+                                    <input type="text" name="ruleName" value={this.state.ruleName} onChange={this.inputChange} className="form-control" />
                                 </div>
                             </div>
                             <div className="form-group d-flex align-items-center">
@@ -633,9 +577,9 @@ export default class Rulespage extends Component {
                                         {this.createUI()}
                                     </div>
                                     <div className="btmAct d-flex">
-                                        {this.state.addColShow ? <div className="actDiv">
+                                        <div className="actDiv">
                                             <button className="btn btn-primary mr-2" type="submit">Add as Column</button>
-                                        </div> : undefined || null}
+                                        </div>
                                     </div>
                                 </form>
 
@@ -706,7 +650,7 @@ export default class Rulespage extends Component {
                                                 {
                                                     r.map((v, b) => {
                                                         return (v !== undefined &&
-                                                            <td key={b}><input name='colValue' value={v.colValue || ''} onChange={e => this.inputOnChange(e)} className="form-control" /></td>
+                                                            <td key={b}><input name='colValue' value={v.colValue || ''} onChange={this.inputChange} className="form-control" /></td>
 
                                                         )
 
@@ -753,7 +697,7 @@ export default class Rulespage extends Component {
                                 <span className="btn btn-primary ml-1" onClick={this.createRules}>Create Rules</span>
                             </div> : null}
                         </div>
-                    </div>
+                    </div> : 'workflow'}
                 </div>
             </div>
         )

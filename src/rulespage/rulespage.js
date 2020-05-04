@@ -166,8 +166,32 @@ export default class Rulespage extends Component {
 
         //Ajay - generate column model and column data
         /*let rulesArray = [
-            {"rule1":{"exclude":"jobname3","col1":"col10","col2":"col20","col3":"col30","col4":"col40","outputColumn":"col5","col5":"col50","associations":{"col1-col2":"or","col2-col3":"and"},"pocessing_order":1}},
-            {"rule2":{"exclude":"jobname4","col1":"col11","col2":"col21","col3":"col31","col4":"col41","outputColumn":"col5","col5":"col51","associations":{"col1-col2":"and","col2-col3":"or"},"pocessing_order":2}}
+            {
+                "rule1":{
+                    "exclude":"jobname3",
+                    "col1":"col10",
+                    "col2":"col20",
+                    "col3":"col30",
+                    "col4":"col40",
+                    "col5":"col50",
+                    "outputColumn":"col5",
+                    "associations":{"col1-col2":"or","col2-col3":"and"},
+                    "pocessing_order":1
+                }
+            },
+            {
+                "rule2":{
+                    "exclude":"jobname4",
+                    "col1":"col11",
+                    "col2":"col21",
+                    "col3":"col31",
+                    "col4":"col41",
+                    "col5":"col51",
+                    "outputColumn":"col5",
+                    "associations":{"col1-col2":"and","col2-col3":"or"},
+                    "pocessing_order":2
+                }
+            }
         ]
 
 

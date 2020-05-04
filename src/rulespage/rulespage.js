@@ -15,9 +15,9 @@ export default class Rulespage extends Component {
         super(props);
         this.wrapper = React.createRef();
         this.wrapperSel = React.createRef();
-        this.addNewRow = this.addNewRow.bind(this);
+        //this.addNewRow = this.addNewRow.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.addClickRow = this.addClickRow.bind(this);
+        //this.addClickRow = this.addClickRow.bind(this);
         this.addClick = this.addClick.bind(this);
         this.state = {
             rulesActive: true,
@@ -162,12 +162,59 @@ export default class Rulespage extends Component {
         this.state.tableDataListNew=arrZ
         console.log('tableDataListNew',this.state.tableDataListNew)
         this.state.dataVal = dataVal;
+
+
+        //Ajay - generate column model and column data
+        /*let rulesArray = [
+            {"rule1":{"exclude":"","col1":"col10","col2":"col20","col3":"col30","col4":"col40","outputColumn":"col5","col5":"col50","associations":{"col1-col2":"or","col2-col3":"and"},"pocessing_order":1}},
+            {"rule2":{"exclude":"","col1":"col11","col2":"col21","col3":"col31","col4":"col41","outputColumn":"col5","col5":"col51","associations":{"col1-col2":"and","col2-col3":"or"},"pocessing_order":2}}
+        ]
+
+        let columnModel = [
+            {columnName: "exclude", columnType: "exclude", columnValue: ""},
+            {columnName: "col1", columnType: "input", columnValue: ""},
+            {columnName: "operator", columnType: "operator", columnValue: "", operatorLHSColumn: "col1", operatorRHSColumn: "col2"},
+            {columnName: "col2", columnType: "input", columnValue: ""},
+            {columnName: "operator", columnType: "operator", columnValue: "", operatorLHSColumn: "col2", operatorRHSColumn: "col3"},
+            {columnName: "col3", columnType: "input", columnValue: ""},
+            {columnName: "col4", columnType: "output", columnValue: ""},
+            {columnName: "col5", columnType: "output", columnValue: ""}
+        ];
+
+        let columnData = [	[
+                {columnName: "exclude", columnType: "exclude", columnValue: ""},
+                {columnName: "col1", columnType: "input", columnValue: "col10"},
+                {columnName: "operator", columnType: "operator", columnValue: "or", operatorLHSColumn: "col1", operatorRHSColumn: "col2"},
+                {columnName: "col2", columnType: "input", columnValue: "col20"},
+                {columnName: "operator", columnType: "operator", columnValue: "and", operatorLHSColumn: "col2", operatorRHSColumn: "col3"},
+                {columnName: "col3", columnType: "input", columnValue: "col30"},
+                {columnName: "col4", columnType: "output", columnValue: "col40"},
+                {columnName: "col5", columnType: "output", columnValue: "col50"}
+            ],
+            [
+                {columnName: "exclude", columnType: "exclude", columnValue: ""},
+                {columnName: "col1", columnType: "input", columnValue: "col11"},
+                {columnName: "operator", columnType: "operator", columnValue: "or", operatorLHSColumn: "col1", operatorRHSColumn: "col2"},
+                {columnName: "col2", columnType: "input", columnValue: "col21"},
+                {columnName: "operator", columnType: "operator", columnValue: "or", operatorLHSColumn: "col2", operatorRHSColumn: "col3"},
+                {columnName: "col3", columnType: "input", columnValue: "col31"},
+                {columnName: "col4", columnType: "output", columnValue: "col41"},
+                {columnName: "col5", columnType: "output", columnValue: "col51"}
+            ]
+        ];*/
+
+
         this.setState({
             tableDataListNew: arrZ,
             dta: this.state.dta,
             dataVal: this.state.dataVal,
             activeLink: index,
-            selectedValue:Object.values(dataVal)
+            selectedValue:Object.values(dataVal),
+
+            //Harshit - new state variables to store data
+            //columnModel: columnModel,
+            //columnData: columnData
+
         });
     }
   
@@ -177,7 +224,7 @@ export default class Rulespage extends Component {
         });
     }
 
-    addNewRow(e) {
+    /*addNewRow(e) {
         this.state.tabaleTdData = []
         let updated = this.state.rulesList.slice();
         const pushDataFull = new Array();
@@ -188,7 +235,7 @@ export default class Rulespage extends Component {
             element = (pushDataFull[index] != undefined ? pushDataFull[index] : '')
         });
         this.setState({ tableDataListNew: this.state.tableDataListNew });
-    }
+    }*/
 
     // Job links Dropdown change event
     onOptionChange = (selectedOptions) => {
@@ -198,10 +245,10 @@ export default class Rulespage extends Component {
         });
     };
 
-    // Esclude Dropdwon
-    onOptionSubChange = (selectedval) => {
+    // Exclude Dropdwon
+    /*onOptionSubChange = (selectedval) => {
         console.log('selectedval', selectedval)
-    }
+    }*/
 
     addClick() {
         this.setState(prevState => ({
@@ -253,7 +300,6 @@ export default class Rulespage extends Component {
         this.state.errorMsg = false
         
         event.preventDefault();
-        let newarr = [];
         if (this.state.users[0].colName == '') {
             alert('Column name empty')
         } else {
@@ -357,9 +403,9 @@ export default class Rulespage extends Component {
         
 
         //Harshit - add newly added column to the grid - START
-        let inputs = this.state.objVal;
+        let inputs = this.state.objVal, columnModel = [], columnData = [];
         let inputColumns = [], outputColumns = [], inputCols = [];
-        Object.values(this.state.objVal).map(obj => {
+        Object.values(inputs).map(obj => {
             if(obj.colValue === 'input') {
                 inputCols.push({
                     columnName: obj.colName,
@@ -392,10 +438,9 @@ export default class Rulespage extends Component {
             columnValue: ""
         }];
         inputColumns = excludeCol.concat(inputColumns);
-        newarr[0] = inputColumns.concat(outputColumns);
+        columnModel = inputColumns.concat(outputColumns);
+        console.info('updated columnModel', columnModel);
         //Harshit - add newly added column to the grid - END
-
-
 
         this.setState({
             colData: this.state.colData,
@@ -406,13 +451,13 @@ export default class Rulespage extends Component {
             tableDataListNew:this.state.tableDataListNew,
 
             //Harshit - new state variables to store data
-            columnModel: newarr[0],
-            columnData: []
+            columnModel: columnModel,
+            columnData: columnData
         })
     }
 
     // Add row
-    addClickRow(e) {
+    /*addClickRow(e) {
         var nextState = this.state;
 
         nextState.fieldsListNew.push(this.state.objVal);
@@ -428,7 +473,7 @@ export default class Rulespage extends Component {
         })
         
         console.log('new row', Object.values(nextState.fieldsList))
-    }
+    }*/
 
     // Create Rules
     createRules = (rulesData) => {
@@ -555,7 +600,7 @@ export default class Rulespage extends Component {
                                             closeMenuOnSelect={false}
                                             components={animatedComponents} value={this.state.value}
                                             isMulti defaultValue={this.state.selectedValue}
-                                            options={this.state.joblist} onChange={e => this.onOptionChange(e)}
+                                            options={this.state.joblist} onChange={this.onOptionChange}
                                         />
                                     </div>
                                     {/* {this.state.errorMsg ? <div className="alert alert-danger" role="alert" >Choose job name</div> : null} */}
@@ -618,7 +663,7 @@ export default class Rulespage extends Component {
                             {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} saveRulesData={this.createRules} /> : ''}
                             
 
-                            <div className="tableList">
+                            {/*<div className="tableList">
                                 <table className="table">
                                     <thead>
                                         {
@@ -639,7 +684,6 @@ export default class Rulespage extends Component {
                                         {this.state.fieldsList.length > 0 && this.state.fieldsList.map((r, j) => (
                                             <tr key={++j}>
                                                 <td key={j}>
-                                                    {/* {r[0].exclude} */}
                                                     <Select key={this.state.value} value={this.state.value} ref={this.wrapperSel}
                                                         closeMenuOnSelect={true}
                                                         components={animatedComponents}
@@ -663,8 +707,8 @@ export default class Rulespage extends Component {
                                         }
                                     </tbody>
                                 </table>
-                            </div>
-                            {this.state.addRowShow ? <div className="addRowSec">
+                            </div>*/}
+                            {/*this.state.addRowShow ? <div className="addRowSec">
                                 <span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
                             {this.state.tableShowData ? 
                             <div className="tableList">
@@ -691,7 +735,7 @@ export default class Rulespage extends Component {
                                 </table>
 
                             </div>
-                            :null}
+                            :null*/}
                             {this.state.createRuleShow ? <div className="mt-4 text-center">
                                 <span className="btn btn-primary mr-1" onClick={this.cancelRules}>Cancel Rules</span>
                                 <span className="btn btn-primary ml-1" onClick={this.createRules}>Create Rules</span>

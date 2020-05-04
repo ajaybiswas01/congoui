@@ -27,6 +27,8 @@ export default class RulesTable extends Component {
                 rowData.push(newObj);
             });
             columnData.push(rowData);
+        } else {
+            columnData = props.columnData;
         }
         this.state = {
             columnModel: props.columnModel || [],
@@ -81,17 +83,9 @@ export default class RulesTable extends Component {
     }
 
     addClickRow = evt => {
-        let { columnModel, columnData } = this.state;
-        let rowData = [], newObj = {};
-        columnModel.map(col => {
-            newObj = {
-                columnName: col.columnName,
-                columnType: col.columnType,
-                columnValue: ''
-            };
-            rowData.push(newObj);
-        });
-        columnData.push(rowData);
+        let columnModel = this.state.columnModel.slice();
+        let columnData = this.state.columnData.slice();
+        columnData.push(columnModel);
         this.setState({
             columnData: columnData
         });
@@ -113,7 +107,7 @@ export default class RulesTable extends Component {
 
 
             //TODO this code is to be deleted
-            console.info("after change", this.state.columnData);
+            console.info("updated columnData", this.state.columnData);
             let rulesArray = [];
             this.state.columnData.map((datarow, rowIndex) => {
                 let ruleJSON = {}, associations = {};
@@ -131,7 +125,7 @@ export default class RulesTable extends Component {
                 ruleJSON['pocessing_order'] = rowIndex+1;
                 rulesArray.push({['rule'+(rowIndex+1)] : ruleJSON});
             });
-            console.info('rulesArray', rulesArray);
+            console.info('updated rules array', rulesArray);
             //TODO this code is to be deleted
 
 

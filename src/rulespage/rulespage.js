@@ -166,9 +166,13 @@ export default class Rulespage extends Component {
 
         //Ajay - generate column model and column data
         /*let rulesArray = [
-            {"rule1":{"exclude":"","col1":"col10","col2":"col20","col3":"col30","col4":"col40","outputColumn":"col5","col5":"col50","associations":{"col1-col2":"or","col2-col3":"and"},"pocessing_order":1}},
-            {"rule2":{"exclude":"","col1":"col11","col2":"col21","col3":"col31","col4":"col41","outputColumn":"col5","col5":"col51","associations":{"col1-col2":"and","col2-col3":"or"},"pocessing_order":2}}
+            {"rule1":{"exclude":"jobname3","col1":"col10","col2":"col20","col3":"col30","col4":"col40","outputColumn":"col5","col5":"col50","associations":{"col1-col2":"or","col2-col3":"and"},"pocessing_order":1}},
+            {"rule2":{"exclude":"jobname4","col1":"col11","col2":"col21","col3":"col31","col4":"col41","outputColumn":"col5","col5":"col51","associations":{"col1-col2":"and","col2-col3":"or"},"pocessing_order":2}}
         ]
+
+
+        //TODO - generate column model and column data from rulesarray
+
 
         let columnModel = [
             {columnName: "exclude", columnType: "exclude", columnValue: ""},
@@ -181,7 +185,8 @@ export default class Rulespage extends Component {
             {columnName: "col5", columnType: "output", columnValue: ""}
         ];
 
-        let columnData = [	[
+        let columnData = [	
+            [
                 {columnName: "exclude", columnType: "exclude", columnValue: ""},
                 {columnName: "col1", columnType: "input", columnValue: "col10"},
                 {columnName: "operator", columnType: "operator", columnValue: "or", operatorLHSColumn: "col1", operatorRHSColumn: "col2"},
@@ -498,7 +503,7 @@ export default class Rulespage extends Component {
             'RULES': subRule,
             'IMPACT': ''
         })
-        console.log('rulesObj', rulesObj)
+        //console.log('rulesObj', rulesObj)
         this.state.fullRulesData = rulesObj        
         this.setState({
             fullRulesData: this.state.fullRulesData,
@@ -516,6 +521,7 @@ export default class Rulespage extends Component {
             'RULES': rulesData,
             'IMPACT': this.state.selectedJobsList
         });
+        console.log('finalObj', finalObj)
         //make API call
     }
 

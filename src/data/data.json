@@ -244,44 +244,29 @@
 {
    "ruleName": "Rulesname3",
    "RULES": {
-      "rule1": {
-         "Timestamp": "2020-01-23 06:01:56",
-         "Product_Category": "Stock",
-         "ARR_VS_UNITS": "BARR",
-         "Stock_flag": "STOCK-SHOW-ARR",
-         "SUBS_OFFER": "*",
-         "product_name": "*",
-         "exclude": "member"
+      "rule1":{
+         "exclude":"jobname3",
+         "col1":"col10",
+         "col2":"col20",
+         "col3":"col30",
+         "col4":"col40",
+         "outputColumn":"col5",
+         "col5":"col50",
+         "associations": {"col1-col2":"or","col2-col3":"and"},
+         "pocessing_order": 1
       },
-      "rule2": {
-         "Timestamp": "2020-01-23 06:01:56",
-         "Product_Category": "Stock",
-         "ARR_VS_UNITS": "*",
-         "Stock_flag": "*",
-         "SUBS_OFFER": "CCI Stock Large,CCI Stock Small,CCI Stock Other,CCT Stock Large,CCT Stock Small,CCT Stock Other",
-         "product_name": "*",
-         "exclude": "member"
-      },
-      "rule3": {
-         "Timestamp": "2020-01-23 06:01:56",
-         "Product_Category": "Acrobat CC",
-         "ARR_VS_UNITS": "*",
-         "Stock_flag": "*",
-         "SUBS_OFFER": "*",
-         "product_name": "ACRS,APCC,APRO",
-         "exclude": "member"
-      },
-      "rule4": {
-         "Timestamp": "2020-01-23 06:01:56",
-         "Product_Category": "Acrobat DC",
-         "ARR_VS_UNITS": "*",
-         "Stock_flag": "*",
-         "SUBS_OFFER": "*",
-         "product_name": "ACRO,APAP",
-         "exclude": "member"
+      "rule2":{
+         "exclude":"jobname4",
+         "col1":"col11",
+         "col2":"col21",
+         "col3":"col31",
+         "col4":"col41",
+         "outputColumn":"col5",
+         "col5":"col51",
+         "associations": {"col1-col2":"and","col2-col3":"or"},
+         "pocessing_order": 2
       }
    },
    "IMPACT": "jobname3,jobname4"
 }
-
 ]

@@ -1116,4 +1116,14 @@ hr.style-two {
       max-width: 250px;
     }
   }
+  .tableListOth.tableList{
+    tr{
+      th:first-child,td:first-child, th:nth-child(2), td:nth-child(2){
+      width: auto;
+      max-width: none;
+      min-width: 180px;
+      }
+    }
+  }
+
 }

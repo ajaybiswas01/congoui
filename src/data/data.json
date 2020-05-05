@@ -252,7 +252,7 @@
          "col4":"col40",
          "col5":"col50",
          "outputColumn":"col5",
-         "associations": {"col1-col2":"or","col2-col3":"and"},
+         "associations": {"col1-col2":"or","col2-col3":"or", "col3-col4":"and"},
          "pocessing_order": 1
       },
       "rule2":{

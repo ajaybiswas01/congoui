@@ -14,7 +14,6 @@ export default class Rulespage extends Component {
     constructor(props) {
         super(props);
         this.wrapper = React.createRef();
-        this.wrapperSel = React.createRef();
         //this.addNewRow = this.addNewRow.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         //this.addClickRow = this.addClickRow.bind(this);
@@ -57,22 +56,22 @@ export default class Rulespage extends Component {
             activeLink: null,
             dataNewVal: [],
             selectedValue:'',
-
+            conArrayVal:'',
+            conArray:'',
 
             //Harshit - new variables for creating grid
             columnModel: [],
             columnData: [],
-            selectedJobsList: []
-
+            selectedJobsList: [],
+            
         };
         for (let c = 0; c < this.state.leftSideData.length; c++) {
             this.state.rulesList.push(Object.values(this.state.leftSideData[c].RULES))
             this.state.tableDataList.push(Object.values(this.state.rulesList[c]))
 
-            for (let b = 0; b < this.state.tableDataList[c].length; b++) {
-                this.state.theadData.push(Object.keys(this.state.tableDataList[c][b]))
-                this.state.tableDataListNew.push(Object.values(this.state.tableDataList[c][b]))
-            }
+            // for (let b = 0; b < this.state.tableDataList[c].length; b++) {
+            //     this.state.theadData.push(Object.keys(this.state.tableDataList[c][b]))
+            // }
             
             const dataNewVal = this.state.leftSideData[c]
             dataNewVal['id'] = c
@@ -80,19 +79,70 @@ export default class Rulespage extends Component {
             this.state.dataNewVal.push(dataNewVal)
 
         }
-        Array.prototype.move = function(from, to) {
-            this.splice(to, 0, this.splice(from, 1)[0]);
-        };
+        this.state.theadData.push(Object.keys(this.state.tableDataList[2][0]))
+
+        console.log('TheadData ss', this.state.rulesList)
+        // Array.prototype.move = function(from, to) {
+        //     this.splice(to, 0, this.splice(from, 1)[0]);
+        // };
+
+        var arrList=this.state.tableDataList[2][0]
+        var arrColData=[]
+        var outval =''
+        var conArrayData=[]
+        var conArray=[]
+        var conArrayVal=[]
+        var assoListKey=''
+        var assoListVal=''
+        for (var property in arrList) {
+            outval = arrList.outputColumn
+            
+            if (['exclude','outputColumn','associations','pocessing_order'].indexOf(property)==-1) {
+                if ([outval].indexOf(property)==-1) {
+                    arrColData.push(property)
+                    conArrayData.push(arrList[property])
+                }
+            }
+        }
+        assoListKey = Object.keys(arrList.associations)
+        assoListVal = Object.values(arrList.associations)
+        var ele=[]
         
+        for (const key in assoListKey) {
+            if (assoListKey.hasOwnProperty(key)) {
+                const element = assoListKey[key].split('-');
+                ele.push(element)
+                
+            }
+        }
+        var iteVal=[]
+        for (const iterator of assoListVal) {
+            iteVal.push(iterator)
+        }
+        arrColData.forEach((element,index) => {
+            conArray.push(element, 'oparator'+index)
+        });
+        conArrayData.forEach((element,index) => {
+            conArrayVal.push(element, iteVal[index])
+        });
+        conArray.splice(conArray.length - 1,1)
+        conArrayVal.splice(conArrayVal.length - 1,1)
+        var result = {};
+        result['exclude']=arrList.exclude
+        for (let index = 0; index < conArray.length; index++) {
+            result[conArray[index]]=conArrayVal[index]
+        }
+        var outVal=arrList.outputColumn
+
+        result[outVal]=arrList[outVal]
+        console.log('fullArr',arrList)
+        conArray=Object.keys(result)
+        conArrayVal=Object.values(result)
+        this.state.conArray=conArray
+        this.state.conArrayVal=conArrayVal
     }
 
-    // Ajay - why initializing state variables here
-    state = {
-        addRowShow: false,
-        errorMsg: true,
-        createRuleShow:false,
-        tableShowData:false
-    }
+
 
     deleteRow = (index) => {
         var newRows=[]
@@ -151,16 +201,15 @@ export default class Rulespage extends Component {
             dataVal.push({ 'label': element, value: c })
         }
 
-        for (let t = 0; t < this.state.theadData.length; t++) {
-            this.state.theadData[t].move(this.state.theadData[t].length - 1,1)
-        }
-        for (let f = 0; f < this.state.tableDataListNew.length; f++) {
-            this.state.tableDataListNew[f].move(this.state.tableDataListNew[f].length - 1,1)
-        }
+        // for (let t = 0; t < this.state.theadData.length; t++) {
+        //     this.state.theadData[t].move(this.state.theadData[t].length - 1,1)
+        // }
+        // for (let f = 0; f < this.state.tableDataListNew.length; f++) {
+        //     this.state.tableDataListNew[f].move(this.state.tableDataListNew[f].length - 1,1)
+        // }
         
-        console.log('dataVal', Object.values(dataVal[0]))
         this.state.tableDataListNew=arrZ
-        console.log('tableDataListNew',this.state.tableDataListNew)
+        console.log('tableDataListNew',this.state.datashowVal)
         this.state.dataVal = dataVal;
 
 
@@ -573,15 +622,17 @@ export default class Rulespage extends Component {
     }
 
     render() {
+        let { conArrayVal, conArray } = this.state;
         for (let v = 0; v < this.state.rulesList.length; v++) {
             this.state.tabaleTdData.push(Object.values(this.state.rulesList[v]))
         }
-        const thdata = this.state.theadData[0].map((item, index) => 
-            {return (item !== undefined || null || '' &&  <th key={index} hidden={index==0 ? true : ''}>
+        const thdata = this.state.theadData[0].map((item, index, arrth) => 
+            {return (item !== undefined &&  <th hidden={index != arrth.length - 1 ? '' : ';'} key={index}>
                 {item}
             </th>)
         }
         );
+        
         
         const { dataNewVal, activeLink } = this.state;
         return (
@@ -658,114 +709,77 @@ export default class Rulespage extends Component {
                                     </div>
                                 </form>
 
-                                {/* <form>
-                                    {this.state.rows.map((row, i) => (
-                                        <div className="row" key={i} onClick={(i) => this.colAdd(i)}>
-                                            <div className="col-md-6">
-                                                <label className="form-label">Column Name</label>
-                                                <div className="input-box d-flex">
-                                                    <input type="text" name='columnName' value={this.state.columnName} onChange={e => this.handleChange(e)} className="form-control" />
-                                                </div>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <label className="form-label">Column Value</label>
-                                                <div className="input-box d-flex">
-                                                    <div className="selBox">
-                                                        <input type="text" name='columnValue' value={this.state.columnValue} onChange={e => this.handleChange(e)} className="form-control" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    <div className="addBtnSec">
-                                        <button className="addBtn btn" onClick={(e) => this.onSubmit(e)}><FontAwesomeIcon icon={faPlus} />Add as row</button>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-md-12">
-                                            <button onClick={this.addNewRow}>ADD</button>
-                                        </div>
-                                    </div>
-                                </form> */}
+                               
                             </div>
 
                             <hr />
                             {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} saveRulesData={this.createRules} /> : ''}
                             
-
-                            {/*<div className="tableList">
-                                <table className="table">
-                                    <thead>
-                                        {
-                                            this.state.fieldsListThead.map((t, h) => (
-                                                <tr key={h}>
-                                                    <th>exclude</th>
-                                                    {
-                                                        t.map((tv, ti) => {
-                                                            return (tv !== undefined && <th key={ti}>{tv.colName}</th>)
-                                                        }
-                                                        )
-                                                    }
-                                                </tr>
-                                            ))
-                                        }
-                                    </thead>
-                                    <tbody>
-                                        {this.state.fieldsList.length > 0 && this.state.fieldsList.map((r, j) => (
-                                            <tr key={++j}>
-                                                <td key={j}>
-                                                    <Select key={this.state.value} value={this.state.value} ref={this.wrapperSel}
-                                                        closeMenuOnSelect={true}
-                                                        components={animatedComponents}
-                                                        options={this.state.selJobList} onChange={e => this.onOptionSubChange(e)}
-                                                    />
-
-                                                </td>
-                                                {
-                                                    r.map((v, b) => {
-                                                        return (v !== undefined &&
-                                                            <td key={b}><input name='colValue' value={v.colValue || ''} onChange={this.inputChange} className="form-control" /></td>
-
-                                                        )
-
-                                                    }
-                                                    )
-
-                                                }
-                                            </tr>
-                                        ))
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>*/}
-                            {/*this.state.addRowShow ? <div className="addRowSec">
+                            {this.state.addRowShow ? <div className="addRowSec">
                                 <span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
                             {this.state.tableShowData ? 
-                            <div className="tableList">
+                            <div className="tableList tableListOth">
+                                
                                 <table className="table">
                                     <thead>
-                                        <tr>{thdata}</tr>
-                                    </thead>
+                                        <tr>
+                                            {
+                                                conArray.map((thv, thi)=>{
+                                                    return (<th key={thi}>
+                                                        {thv}
+                                                    </th>)
+                                                }
 
+                                                )
+                                            }
+                                        </tr>
+                                    </thead>
                                     <tbody>
+                                        <tr>
+                                        {
+                                            conArrayVal.map((tdv, tdi)=>{
+                                                return (<td key={tdi}>
+                                                    {tdv}
+                                                </td>)
+                                            }
+
+                                            )
+                                        }
+                                        </tr>
+                                    </tbody>
+
+
+                                    {/* <thead>
+                                        <tr>{thdata}</tr>
+                                    </thead> */}
+
+                                    {/* <tbody>
                                         {
                                             this.state.tableDataListNew.map((numList, i) => (
                                                 <tr key={i}>
+                                                    
                                                     {
-                                                        numList.map((num, j) => {
-                                                            return (num !== undefined && <td hidden={j==0 ? true : false} key={j}><input name='colValue' value={num} className="form-control" onChange={e => this.inputChange(e)} /></td>)
+                                                        numList.map((num, j,arr) => {
+                                                            return (num !== undefined && <td hidden={j !== arr.length - 1 ? '' : '; '} key={j}>
+                                                                {num === 'associations' ? '' : 
+                                                                    <input name='colValue' value={num}  defaultValue={num.value} className="form-control" onChange={e => this.inputChange(e)} />
+                                                                }
+                                                                
+                                                                </td> 
+                                                            ) 
                                                         }
                                                         )
                                                     }
+                                                    
                                                 </tr>
                                             ))
                                         }
-                                    </tbody>
+                                    </tbody> */}
 
                                 </table>
 
                             </div>
-                            :null*/}
+                            :null}
                             {this.state.createRuleShow ? <div className="mt-4 text-center">
                                 <span className="btn btn-primary mr-1" onClick={this.cancelRules}>Cancel Rules</span>
                                 <span className="btn btn-primary ml-1" onClick={this.createRules}>Create Rules</span>

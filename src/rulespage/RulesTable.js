@@ -201,7 +201,7 @@ export default class RulesTable extends Component {
                 <div className="mainPanel d-flex">
                     <div className="rightSide">
                         <div className="rulesContainer p-3">
-                            <div className="tableList">
+                            <div className="tableList tableListNew">
                                 <table className="table">
                                     <thead>
                                         <tr>
@@ -225,11 +225,11 @@ export default class RulesTable extends Component {
                                     </thead>
                                     {columnData.length ? <tbody>
                                         {columnData.map((rowData, rowIndex) => {
-                                            return <tr>
+                                            return <tr key={rowIndex}>
                                                 <td>{rowIndex+1}</td>
                                                 <td><span className="minusBtn btn btn-outline-primary" onClick={e => this.removeRow(rowIndex)}><FontAwesomeIcon icon={faMinus} /></span></td>
                                                 {rowData && rowData.length && rowData.map((colData, colIndex) => {
-                                                    return <td data-columntype={(colData.columnType === 'output') ? "output" : ''}>
+                                                    return <td key={colIndex} data-columntype={(colData.columnType === 'output') ? "output" : ''}>
                                                     {colData.columnType === 'operator' ? 
                                                         <select defaultValue={colData.columnValue} className="form-control" 
                                                             onChange={e => this.onCellUpdate(rowIndex, colIndex, e.target.value)}>

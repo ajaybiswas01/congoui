@@ -14,6 +14,7 @@ export default class RulesTable extends Component {
         let newObj = {}, columnData = [];
         if (!datarows.length) {
             let rowData = [];
+            console.log('Modal', props.columnModel)
             props.columnModel.map(col => {
                 newObj = {
                     columnName: col.columnName,

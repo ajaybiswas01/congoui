@@ -13,10 +13,11 @@ const animatedComponents = makeAnimated();
 export default class Rulespage extends Component {
     constructor(props) {
         super(props);
+        
+
+
         this.wrapper = React.createRef();
-        //this.addNewRow = this.addNewRow.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        //this.addClickRow = this.addClickRow.bind(this);
         this.addClick = this.addClick.bind(this);
         this.state = {
             rulesActive: true,
@@ -55,103 +56,235 @@ export default class Rulespage extends Component {
             escuSelBox: new Array(),
             activeLink: null,
             dataNewVal: [],
-            selectedValue:'',
-            conArrayVal:'',
-            conArray:'',
+            selectedValue: '',
+            conArrayVal: '',
+            conArray: '',
 
+            colValData: [],
+            colModel: [],
+            selectedJobsData:[],
             //Harshit - new variables for creating grid
             columnModel: [],
             columnData: [],
             selectedJobsList: [],
-            
+
         };
+
         for (let c = 0; c < this.state.leftSideData.length; c++) {
             this.state.rulesList.push(Object.values(this.state.leftSideData[c].RULES))
             this.state.tableDataList.push(Object.values(this.state.rulesList[c]))
-
-            // for (let b = 0; b < this.state.tableDataList[c].length; b++) {
-            //     this.state.theadData.push(Object.keys(this.state.tableDataList[c][b]))
-            // }
-            
             const dataNewVal = this.state.leftSideData[c]
             dataNewVal['id'] = c
             dataNewVal['className'] = 'listLi'
             this.state.dataNewVal.push(dataNewVal)
 
         }
-        this.state.theadData.push(Object.keys(this.state.tableDataList[2][0]))
+        var newArrList = this.state.tableDataList
+        var arrData = []
 
-        console.log('TheadData ss', this.state.rulesList)
-        // Array.prototype.move = function(from, to) {
-        //     this.splice(to, 0, this.splice(from, 1)[0]);
-        // };
+        for (let a = 0; a < newArrList.length; a++) {
+            const ec = newArrList[2];
+            arrData = []
+            for (let b = 0; b < ec.length; b++) {
+                arrData.push(ec[b]);
 
-        var arrList=this.state.tableDataList[2][0]
-        var arrColData=[]
-        var outval =''
-        var conArrayData=[]
-        var conArray=[]
-        var conArrayVal=[]
-        var assoListKey=''
-        var assoListVal=''
-        for (var property in arrList) {
-            outval = arrList.outputColumn
-            
-            if (['exclude','outputColumn','associations','pocessing_order'].indexOf(property)==-1) {
-                if ([outval].indexOf(property)==-1) {
-                    arrColData.push(property)
-                    conArrayData.push(arrList[property])
+            }
+
+        }
+
+        
+        
+// ====================================
+        
+
+
+
+        
+        
+        var arrList = []
+        var arrListTbody = []
+
+        for (let index = 0; index < arrData.length; index++) {
+            var arrColData = []
+            var outval = ''
+            var conArrayData = []
+            var conArray = []
+            var conArrayVal = []
+            var assoListKey = ''
+            var assoListVal = ''
+            for (var property in arrData[index]) {
+                outval = arrData[index].outputColumn
+                if (['exclude', 'outputColumn', 'associations', 'pocessing_order'].indexOf(property) == -1) {
+                    if ([outval].indexOf(property) == -1) {
+                        arrColData.push(property)
+                        conArrayData.push(arrData[index][property])
+                    }
+                    else{
+                    }
                 }
             }
-        }
-        assoListKey = Object.keys(arrList.associations)
-        assoListVal = Object.values(arrList.associations)
-        var ele=[]
-        
-        for (const key in assoListKey) {
-            if (assoListKey.hasOwnProperty(key)) {
-                const element = assoListKey[key].split('-');
-                ele.push(element)
-                
+            assoListKey = Object.keys(arrData[index].associations)
+            assoListVal = Object.values(arrData[index].associations)
+            // var ele = []
+            // for (const key in assoListKey) {
+            //     if (assoListKey.hasOwnProperty(key)) {
+            //         const element = assoListKey[key].split('-');
+            //         ele.push(element)
+            //     }
+            // }
+            var iteVal = []
+            for (const iterator of assoListVal) {
+                iteVal.push(iterator)
             }
-        }
-        var iteVal=[]
-        for (const iterator of assoListVal) {
-            iteVal.push(iterator)
-        }
-        arrColData.forEach((element,index) => {
-            conArray.push(element, 'oparator'+index)
-        });
-        conArrayData.forEach((element,index) => {
-            conArrayVal.push(element, iteVal[index])
-        });
-        conArray.splice(conArray.length - 1,1)
-        conArrayVal.splice(conArrayVal.length - 1,1)
-        var result = {};
-        result['exclude']=arrList.exclude
-        for (let index = 0; index < conArray.length; index++) {
-            result[conArray[index]]=conArrayVal[index]
-        }
-        var outVal=arrList.outputColumn
+            var opaTag =[]
+            arrColData.forEach((element, index) => {
+                opaTag.push(element)
 
-        result[outVal]=arrList[outVal]
-        console.log('fullArr',arrList)
-        conArray=Object.keys(result)
-        conArrayVal=Object.values(result)
-        this.state.conArray=conArray
-        this.state.conArrayVal=conArrayVal
+            });
+            
+            conArray=opaTag
+            console.log(conArray)
+            conArrayData.forEach((element, index) => {
+                conArrayVal.push(element)
+            });
+            // conArray[0].pop()
+            // conArrayVal.pop()
+
+            var result = {};
+            var conArrayUpdate =Object.values(conArray)
+            // result['exclude'] = arrData[index].exclude
+            for (let index = 0; index < conArrayUpdate.length; index++) {
+                result[conArrayUpdate[index]] = conArrayVal[index] == undefined ? '' : conArrayVal[index]
+            }
+            // var outVal = arrData[index].outputColumn
+            // result[outVal] = arrData[index][outVal]
+
+            conArray = Object.keys(result)
+            conArrayVal = Object.values(result)
+            console.log('result', result)
+            arrListTbody.push(result)
+            arrList[index]=result
+        }
+        var contData=[]
+        for (let v = 0; v < arrList.length; v++) {
+            const valueData =Object.values(arrList[v])
+            contData.push(valueData)
+        }
+        
+
+        var outValue=[]
+        for (let v = 0; v < arrData.length; v++) {
+            outValue.push(arrData[v].outputColumn)
+            // arrData[v].outValue='output'
+            const { exclude,pocessing_order,associations,outputColumn,col5, ...arrDataDel } = arrData[v];
+            console.log('arrDataDel', arrDataDel)
+            var eleValues=[]
+            Object.keys(arrDataDel).forEach((element,i) => {
+                // eleValues.push({'colTagName':element,'colTagType':element, 'colTagValue':elev[i]})
+                eleValues.push({'colTagName':element, 'colTagValue':element})
+              const objIndex = eleValues.findIndex((obj => obj.colTagValue == element));
+                eleValues[objIndex].colTagValue = "Input"
+                //console.log('objIndex', eleValues[objIndex].colTagType);
+                
+                
+            });
+        }
+        outValue.pop()
+        console.log('outValue',JSON.stringify(outValue[0]))
+        // ==============================================
+
+        console.log('valueData', arrListTbody)
+        console.log('eleValues', eleValues)
+        let inputTags = eleValues, colModel = [], colValData=[];
+        let inputColTag = [], outputColTag = [], inputCol = [];
+
+        Object.values(inputTags).map(obj => {
+            if (obj.colTagValue === 'Input') {
+                inputCol.push({
+                    colTagName: obj.colTagName,
+                    colTagType: obj.colTagValue,
+                    colTagValue: ""
+                });
+            }
+            if (obj.colTagName === outValue[0]) {
+                inputColTag.push({
+                    colTagName: obj.colTagName,
+                    colTagType: 'output',
+                    colTagValue: ""
+                });
+            }
+        });
+        inputCol.map((obj, i) => {
+            inputColTag.push(obj);
+            if (i + 1 !== inputCol.length)
+            inputColTag.push({
+                    colTagName: "operator",
+                    colTagType: "operator",
+                    colTagValue: "",
+                    operatorLHSColumn: obj.operatorLHSColumn,
+                    operatorRHSColumn: inputCol[i + 1].operatorRHSColumn
+                });
+        });
+        let excludeCol = [{
+            colTagName: "exclude",
+            colTagType: "exclude",
+            colTagValue: ""
+        }];
+        inputTags = excludeCol.concat(inputColTag);
+        colModel = inputColTag.concat(outputColTag);
+        console.log('colModel',inputTags)
+
+
+        const dataRowsall = colValData.slice();
+        console.log('dataRowsall',dataRowsall)
+        let colNewObj = {};
+        if (!dataRowsall.length) {
+            let rowNewData = [];
+            
+            colModel.map(colv => {
+                colNewObj = {
+                    colTagName: colv.colTagName,
+                    colTagType: colv.colTagType,
+                    colTagValue: ''
+                };
+                if(colv.colTagName === 'operator') {
+                    colNewObj['operatorLHSColumn'] = colv.operatorLHSColumn; 
+                    colNewObj['operatorRHSColumn'] = colv.operatorRHSColumn;
+                }
+                rowNewData.push(colNewObj);
+            });
+            colValData.push(rowNewData);
+        } else {
+            colValData = colValData;
+        }
+        // colValData[0].pop();
+        // colValData[0].push(colValData[0].shift());
+        console.log('colValData ===>>>', colValData)
+        console.log('colModel====>>>', colModel)
+        this.state.colModel=colModel
+        this.state.colValData=colValData
+        this.setState({
+            colModel: colModel,
+            colValData: colValData
+        })
+        // ========================================
+
+
+        //this.state.conArray = Object.keys(arrList[0])
+            // this.state.conArrayVal = arrListTbody
+            // this.state.theadData = Object.keys(arrList[0])
     }
 
 
 
     deleteRow = (index) => {
-        var newRows=[]
+        var newRows = []
         if (window.confirm("Delete the item?")) {
             newRows = this.state.dataNewVal.slice(0, index).concat(this.state.dataNewVal.slice(index + 1));
-        }else{
+        } else {
             return false
         }
-        
+
         this.setState({
             dataNewVal: newRows,
         });
@@ -165,54 +298,31 @@ export default class Rulespage extends Component {
 
     listClick = (index) => {
         this.state.ruleName = this.state.leftSideData[index].ruleName
-        this.state.tableShowData= true;
-        this.state.createRuleShow=true
+        this.state.tableShowData = true;
+        this.state.createRuleShow = true
 
-        this.state.tableDataListNew = [];
+        
 
         this.state.datashowVal = this.state.rulesList[index];
         this.state.rulesdata = Object.values(this.state.leftSideData[index])
         this.state.dta = this.state.rulesdata[2].split(',');
-
-        // grid data
-        var arrX = [], arrY = [], arrZ = [], i = 0, j = 0, newArr = [];
-        this.state.datashowVal.forEach((item, ind) => {
-            arrY[j] = [];
-            newArr = Object.values(item);
-            newArr.forEach((vt, it) => {
-                if (arrX.indexOf(it) < 0) {
-                    arrX[i] = it;
-                    i++
-                }
-                arrY[j][it] = vt;
-            });
-            j++
-        });
-        arrY.forEach((vt, it) => {
-            arrZ[it] = [];
-            for (let n = 0; n < arrX.length; n++) {
-                arrZ[it][n] = vt[arrX[n]] ? vt[arrX[n]] : '';
-
-            }
-        });
         const dataVal = []
         for (let c = 0; c < this.state.dta.length; c++) {
             const element = this.state.dta[c];
             dataVal.push({ 'label': element, value: c })
         }
-
-        // for (let t = 0; t < this.state.theadData.length; t++) {
-        //     this.state.theadData[t].move(this.state.theadData[t].length - 1,1)
-        // }
-        // for (let f = 0; f < this.state.tableDataListNew.length; f++) {
-        //     this.state.tableDataListNew[f].move(this.state.tableDataListNew[f].length - 1,1)
-        // }
+        this.state.tableDataListNew=[]
+        var simData=''
+        for (let v = 0; v < this.state.conArrayVal.length; v++) {
+            simData=[this.state.conArrayVal[v]]
+            this.state.tableDataListNew.push(simData)
+            
+        }
         
-        this.state.tableDataListNew=arrZ
-        console.log('tableDataListNew',this.state.datashowVal)
+        console.log('tableDataListNew', this.state.tableDataListNew)
         this.state.dataVal = dataVal;
 
-
+        
         //Ajay - generate column model and column data
         /*let rulesArray = [
             {
@@ -283,11 +393,11 @@ export default class Rulespage extends Component {
 
 
         this.setState({
-            tableDataListNew: arrZ,
+            tableDataListNew: this.state.tableDataListNew,
             dta: this.state.dta,
             dataVal: this.state.dataVal,
             activeLink: index,
-            selectedValue:Object.values(dataVal),
+            selectedValue: Object.values(dataVal),
 
             //Harshit - new state variables to store data
             //columnModel: columnModel,
@@ -295,25 +405,13 @@ export default class Rulespage extends Component {
 
         });
     }
-  
+
     inputChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
 
-    /*addNewRow(e) {
-        this.state.tabaleTdData = []
-        let updated = this.state.rulesList.slice();
-        const pushDataFull = new Array();
-        for (let x = 0; x < this.state.tableDataListNew.length; x++) {
-            pushDataFull.push(this.state.tableDataListNew[x]);
-        }
-        this.state.tableDataListNew.forEach((element, index) => {
-            element = (pushDataFull[index] != undefined ? pushDataFull[index] : '')
-        });
-        this.setState({ tableDataListNew: this.state.tableDataListNew });
-    }*/
 
     // Job links Dropdown change event
     onOptionChange = (selectedOptions) => {
@@ -323,10 +421,6 @@ export default class Rulespage extends Component {
         });
     };
 
-    // Exclude Dropdwon
-    /*onOptionSubChange = (selectedval) => {
-        console.log('selectedval', selectedval)
-    }*/
 
     addClick() {
         this.setState(prevState => ({
@@ -376,7 +470,7 @@ export default class Rulespage extends Component {
     handleSubmit(event) {
 
         this.state.errorMsg = false
-        
+
         event.preventDefault();
         if (this.state.users[0].colName == '') {
             alert('Column name empty')
@@ -417,27 +511,27 @@ export default class Rulespage extends Component {
                     }
                 }
             }
-            var newArrData=[]
-            var newArrDataTd=[]
+            var newArrData = []
+            var newArrDataTd = []
             for (let v = 0; v < this.state.users.length; v++) {
                 const eleth = this.state.users[v].colName;
                 const eletd = this.state.users[v].colValue
                 newArrData.push(eleth)
                 newArrDataTd.push(eletd)
             }
-            for (let index = 0; index < this.state.theadData.length; index++) {
-                const element = this.state.theadData[index];
-                for (let b = 0; b < newArrData.length; b++) {
-                    element.push(newArrData[b])
-                }
-            }
-            for (let f = 0; f < this.state.tableDataListNew.length; f++) {
-                const element = this.state.tableDataListNew[f];
-                for (let j = 0; j < newArrDataTd.length; j++) {
-                    element.push(newArrDataTd[j])
-                }
-                this.state.tableDataListNew[f]=element
-            }
+            // for (let index = 0; index < this.state.theadData.length; index++) {
+            //     const element = this.state.theadData[index];
+            //     for (let b = 0; b < newArrData.length; b++) {
+            //         element.push(newArrData[b])
+            //     }
+            // }
+            // for (let f = 0; f < this.state.tableDataListNew.length; f++) {
+            //     const element = this.state.tableDataListNew[f];
+            //     for (let j = 0; j < newArrDataTd.length; j++) {
+            //         element.push(newArrDataTd[j])
+            //     }
+            //     this.state.tableDataListNew[f]=element
+            // }
 
             this.state.addRowShow = true;
             this.state.colData = this.state.users
@@ -471,27 +565,28 @@ export default class Rulespage extends Component {
                     this.state.objVal.push(valueResult[u])
                 }
             }
-            console.log('u', this.state.objVal)
+            console.log('objVal', this.state.objVal)
             this.state.fieldsListThead[0] = Object.values(this.state.objVal)
             for (let v = 0; v < this.state.fieldsList.length; v++) {
                 this.state.fieldsList = this.state.fieldsListNew
                 this.state.fieldsList[v] = Object.values(this.state.objVal)
             }
         }
-        
+
 
         //Harshit - add newly added column to the grid - START
         let inputs = this.state.objVal, columnModel = [], columnData = [];
         let inputColumns = [], outputColumns = [], inputCols = [];
+        console.log('inputColumns', inputCols)
         Object.values(inputs).map(obj => {
-            if(obj.colValue === 'input') {
+            if (obj.colValue === 'input') {
                 inputCols.push({
                     columnName: obj.colName,
                     columnType: obj.colValue,
                     columnValue: ""
                 });
             }
-            if(obj.colValue === 'output') {
+            if (obj.colValue === 'output') {
                 outputColumns.push({
                     columnName: obj.colName,
                     columnType: obj.colValue,
@@ -499,15 +594,15 @@ export default class Rulespage extends Component {
                 });
             }
         });
-        inputCols.map((obj,i) => {
+        inputCols.map((obj, i) => {
             inputColumns.push(obj);
-            if(i+1 !== inputCols.length)
+            if (i + 1 !== inputCols.length)
                 inputColumns.push({
                     columnName: "operator",
                     columnType: "operator",
                     columnValue: "",
                     operatorLHSColumn: obj.columnName,
-                    operatorRHSColumn: inputCols[i+1].columnName
+                    operatorRHSColumn: inputCols[i + 1].columnName
                 });
         });
         let excludeCol = [{
@@ -526,7 +621,7 @@ export default class Rulespage extends Component {
             fieldsListThead: this.state.fieldsListThead,
             escuSelBox: this.state.escuSelBox,
             selJobList: this.state.selJobList,
-            tableDataListNew:this.state.tableDataListNew,
+            tableDataListNew: this.state.tableDataListNew,
 
             //Harshit - new state variables to store data
             columnModel: columnModel,
@@ -577,7 +672,7 @@ export default class Rulespage extends Component {
             'IMPACT': ''
         })
         //console.log('rulesObj', rulesObj)
-        this.state.fullRulesData = rulesObj        
+        this.state.fullRulesData = rulesObj
         this.setState({
             fullRulesData: this.state.fullRulesData,
             fieldsList: this.state.fieldsList,
@@ -588,7 +683,7 @@ export default class Rulespage extends Component {
 
 
         //Harshit - send to API
-        const finalObj=[];
+        const finalObj = [];
         finalObj.push({
             'ruleName': this.state.ruleName,
             'RULES': rulesData,
@@ -599,41 +694,47 @@ export default class Rulespage extends Component {
     }
 
     // Cancel Rules
-    cancelRules=()=>{
-        this.state.tableDataListNew=[] // Ajay - why doing this way?
+    cancelRules = () => {
+        this.state.tableDataListNew = [] // Ajay - why doing this way?
         this.state.fieldsList = []
         this.state.theadData[0] = []
-        this.state.objVal=[]
-        this.state.users= [{ colName: "", colValue: "" }]
-        this.state.fieldsListThead=[]
-        this.state.addRowShow=false
-        this.state.dataVal=[]
-        this.state.createRuleShow=false
+        this.state.objVal = []
+        this.state.users = [{ colName: "", colValue: "" }]
+        this.state.fieldsListThead = []
+        this.state.addRowShow = false
+        this.state.dataVal = []
+        this.state.createRuleShow = false
         this.setState({
             fieldsList: this.state.fieldsList,
             tableDataListNew: this.state.tableDataListNew,
             theadData: this.state.theadData,
-            objVal:this.state.objVal,
+            objVal: this.state.objVal,
             users: this.state.users,
-            fieldsListThead:this.state.fieldsListThead,
-            ruleName:'',
-            dataVal:this.state.dataVal
+            fieldsListThead: this.state.fieldsListThead,
+            ruleName: '',
+            dataVal: this.state.dataVal
         })
     }
 
     render() {
-        let { conArrayVal, conArray } = this.state;
+        let { tableDataListNew, conArray } = this.state;
         for (let v = 0; v < this.state.rulesList.length; v++) {
             this.state.tabaleTdData.push(Object.values(this.state.rulesList[v]))
         }
-        const thdata = this.state.theadData[0].map((item, index, arrth) => 
-            {return (item !== undefined &&  <th hidden={index != arrth.length - 1 ? '' : ';'} key={index}>
+        const thdata = this.state.theadData.map((item, index, arrth) => {
+            return (item !== undefined && <th key={index}>
                 {item}
             </th>)
         }
         );
-        
-        
+        let { colModel, colValData, selectedJobsData } = this.state;
+        // console.log('colValData', colValData)
+        // console.log('colModel', colModel)
+        let colsOutput = [];
+        colModel.map((co, ti) => {
+            return (co !== undefined && co.colTagType === 'output' ? colsOutput.push(co.colTagName) : '');
+        });
+
         const { dataNewVal, activeLink } = this.state;
         return (
             <div className="App">
@@ -660,8 +761,8 @@ export default class Rulespage extends Component {
                                     </ul>
                                 </div>
                             </div> : <div>
-                                <div className="">Workflows</div>
-                            </div>}
+                                    <div className="">Workflows</div>
+                                </div>}
                         </div>
                     </div>
                     {this.state.rulesActive ? <div className="rightSide">
@@ -709,77 +810,83 @@ export default class Rulespage extends Component {
                                     </div>
                                 </form>
 
-                               
+
                             </div>
 
                             <hr />
                             {this.state.columnModel.length ? <RulesTable columnModel={this.state.columnModel} selectedJobsList={this.state.selectedJobsList} columnData={this.state.columnData} saveRulesData={this.createRules} /> : ''}
-                            
+
                             {this.state.addRowShow ? <div className="addRowSec">
                                 <span className="btn btn-primary" onClick={this.addClickRow}>Add new row</span></div> : null}
-                            {this.state.tableShowData ? 
-                            <div className="tableList tableListOth">
-                                
-                                <table className="table">
-                                    <thead>
-                                        <tr>
+                            {this.state.tableShowData ?
+                                <div className="tableList tableListOth">
+
+                                    <table className="table">
+
+
+
+                                        <thead>
+                                            <tr>{thdata}</tr>
+                                        </thead>
+                                        {colValData.length ? <tbody>
+    {colValData.map((rowValData, rowValIndex) => {
+        return <tr key={rowValIndex}>
+            <td>{rowValIndex+1}</td>
+            <td><span className="minusBtn btn btn-outline-primary" onClick={e => this.removeRow(rowValIndex)}><FontAwesomeIcon icon={faMinus} /></span></td>
+            {rowValData && rowValData.length && rowValData.map((colTagData, colValIndex) => {
+                return <td key={colValIndex} data-columntype={(colTagData.colTagType === 'output') ? "output" : ''}>
+                {colTagData.colTagType === 'operator' ? 
+                    <select defaultValue={colTagData.colTagValue} className="form-control" 
+                        onChange={e => this.onCellUpdate(rowValIndex, colValIndex, e.target.value)}>
+                        <option>Select Operator</option>
+                        <option value="and">and</option>
+                        <option value="or">or</option>
+                    </select> : 
+                    (colTagData.colTagType === 'Input' || colTagData.colTagType === 'output' ? 
+                        (<input placeholder={'Enter '+colTagData.colTagName+' Value'} type="text" value={colTagData.colTagValue} defaultValue={colTagData.colTagValue} className="form-control" 
+                            onChange={e => this.onCellUpdate(rowValIndex, colValIndex, e.target.value)}/>) : 
+                            (colTagData.colTagType === 'exclude' ? 
+                                <Select closeMenuOnSelect={true} components={animatedComponents} 
+                                    value={selectedJobsData.filter(option => option.label === colTagData.colTagValue)}
+                                    options={selectedJobsData} onChange={e => this.onCellUpdate(rowValIndex, colValIndex, e.value)} /> : ''
+                            )
+                    )
+                }
+                </td>
+            })}
+        </tr>
+    })}
+</tbody> : ''} 
+                                        {/* <tbody>
                                             {
-                                                conArray.map((thv, thi)=>{
-                                                    return (<th key={thi}>
-                                                        {thv}
-                                                    </th>)
-                                                }
-
-                                                )
-                                            }
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        {
-                                            conArrayVal.map((tdv, tdi)=>{
-                                                return (<td key={tdi}>
-                                                    {tdv}
-                                                </td>)
-                                            }
-
-                                            )
-                                        }
-                                        </tr>
-                                    </tbody>
-
-
-                                    {/* <thead>
-                                        <tr>{thdata}</tr>
-                                    </thead> */}
-
-                                    {/* <tbody>
-                                        {
-                                            this.state.tableDataListNew.map((numList, i) => (
-                                                <tr key={i}>
+                                                tableDataListNew.map((numList, i) => (
                                                     
-                                                    {
-                                                        numList.map((num, j,arr) => {
-                                                            return (num !== undefined && <td hidden={j !== arr.length - 1 ? '' : '; '} key={j}>
-                                                                {num === 'associations' ? '' : 
-                                                                    <input name='colValue' value={num}  defaultValue={num.value} className="form-control" onChange={e => this.inputChange(e)} />
-                                                                }
-                                                                
-                                                                </td> 
-                                                            ) 
+                                                    <tr key={i}>
+
+                                                        {
+                                                            numList.map((num, j, arr) => {
+                                                                console.log(num)
+                                                                return (<td key={j}>
+
+                                                                    {num === 'exclude'  ?
+                                                                        <input name='colValue' className="form-control" /> : ''
+                                                                    }
+
+                                                                </td>
+                                                                )
+                                                            }
+                                                            )
                                                         }
-                                                        )
-                                                    }
-                                                    
-                                                </tr>
-                                            ))
-                                        }
-                                    </tbody> */}
 
-                                </table>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody> */}
 
-                            </div>
-                            :null}
+                                    </table>
+
+                                </div>
+                                : null}
                             {this.state.createRuleShow ? <div className="mt-4 text-center">
                                 <span className="btn btn-primary mr-1" onClick={this.cancelRules}>Cancel Rules</span>
                                 <span className="btn btn-primary ml-1" onClick={this.createRules}>Create Rules</span>

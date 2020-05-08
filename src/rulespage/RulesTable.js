@@ -232,7 +232,7 @@ export default class RulesTable extends Component {
                                                 {rowData && rowData.length && rowData.map((colData, colIndex) => {
                                                     return <td key={colIndex} data-columntype={(colData.columnType === 'output') ? "output" : ''}>
                                                     {colData.columnType === 'operator' ? 
-                                                        <select defaultValue={colData.columnValue} className="form-control" 
+                                                        <select key={colIndex} defaultValue={colData.columnValue} className="form-control" 
                                                             onChange={e => this.onCellUpdate(rowIndex, colIndex, e.target.value)}>
                                                             <option>Select Operator</option>
                                                             <option value="and">and</option>
